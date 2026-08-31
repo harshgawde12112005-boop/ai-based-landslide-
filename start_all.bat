@@ -13,3 +13,4 @@ echo Both services are now running!
 echo Access Dashboard: http://localhost:5173
 echo Access Backend API: http://localhost:8000/docs
 echo ========================================================
+
