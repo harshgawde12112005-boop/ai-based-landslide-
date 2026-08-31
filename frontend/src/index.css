@@ -1,28 +1,36 @@
-:root {
-  font-family: Inter, system-ui, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
-  color: rgba(255, 255, 255, 0.87);
-  background: #11141a;
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html, body, #root {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  width: 100%;
+  font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-* {
-  box-sizing: border-box;
+button, input, select, textarea {
+  font-family: inherit;
 }
 
-html,
-body,
-#root {
-  margin: 0;
-  min-height: 100%;
-  width: 100%;
+/* Custom sleek scrollbar */
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
 }
 
-button,
-input {
-  font: inherit;
+::-webkit-scrollbar-track {
+  background: var(--bg-surface-secondary, rgba(0, 0, 0, 0.1));
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border-color, rgba(148, 163, 184, 0.3));
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-primary, #10b981);
 }

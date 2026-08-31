@@ -1,43 +1,82 @@
 import React from 'react';
+import { AlertTriangle, ShieldCheck, Activity, Radio, Droplets, Mountain } from 'lucide-react';
 
 export default function TopCards({ riskData, rainfall, soilMoisture, slope }) {
   const dynamicRisk = riskData?.overall_risk_pct ?? 0;
   const riskLevel = riskData?.risk_level ?? 'LOW';
+  const fos = riskData?.factor_of_safety ?? 1.85;
+
+  const getRiskColor = (level) => {
+    switch (level) {
+      case 'CRITICAL':
+        return '#ef4444';
+      case 'HIGH':
+        return '#f59e0b';
+      case 'MODERATE':
+        return '#eab308';
+      default:
+        return '#10b981';
+    }
+  };
+
+  const currentRiskColor = getRiskColor(riskLevel);
 
   const cards = [
     {
-      label: 'Current zone risk',
+      label: 'Zone Risk Index',
       value: `${dynamicRisk}%`,
-      accent: '#f87171',
-      meta: `Rain ${rainfall}mm • Soil ${soilMoisture}%`,
+      accent: currentRiskColor,
+      icon: <AlertTriangle size={20} />,
+      meta: `${riskLevel} Risk • Rain ${rainfall}mm`,
+      valueColor: currentRiskColor,
     },
     {
-      label: 'AI confidence',
+      label: 'Factor of Safety (FoS)',
+      value: `${fos}`,
+      accent: fos < 1.1 ? '#ef4444' : fos < 1.3 ? '#f59e0b' : '#10b981',
+      icon: <Mountain size={20} />,
+      meta: fos < 1.0 ? 'Failure Imminent' : fos < 1.3 ? 'Marginal Stability' : 'Geotechnically Stable',
+      valueColor: fos < 1.1 ? '#ef4444' : fos < 1.3 ? '#f59e0b' : '#10b981',
+    },
+    {
+      label: 'Model Confidence',
       value: `${riskData?.confidence ?? 89}%`,
-      accent: '#38bdf8',
-      meta: `Slope ${slope}° • Stable model`,
+      accent: '#0ea5e9',
+      icon: <Activity size={20} />,
+      meta: `Slope ${slope}° • Multi-sensor Feed`,
+      valueColor: '#0ea5e9',
     },
     {
-      label: 'Priority actions',
-      value: riskLevel === 'CRITICAL' ? '4' : riskLevel === 'HIGH' ? '3' : '1',
-      accent: '#fbbf24',
-      meta: 'Field inspection required',
-    },
-    {
-      label: 'Emergency status',
-      value: riskLevel === 'CRITICAL' ? 'Escalated' : riskLevel === 'HIGH' ? 'Watch' : 'Normal',
-      accent: '#4ade80',
-      meta: 'Traffic & alerts routed',
+      label: 'Telemetry Status',
+      value: riskLevel === 'CRITICAL' ? 'EVACUATION' : riskLevel === 'HIGH' ? 'WATCH' : 'NOMINAL',
+      accent: currentRiskColor,
+      icon: <Radio size={20} />,
+      meta: `Soil ${soilMoisture}% Saturation`,
+      valueColor: currentRiskColor,
     },
   ];
 
   return (
     <div className="topcards-grid">
       {cards.map((card) => (
-        <div key={card.label} className="metric-card" style={{ '--accent': card.accent, '--value-color': card.accent }}>
-          <p className="label">{card.label}</p>
+        <div
+          key={card.label}
+          className="metric-card"
+          style={{
+            '--accent-bar': card.accent,
+            '--value-color': card.valueColor,
+          }}
+        >
+          <div className="metric-header">
+            <p className="label">{card.label}</p>
+            <div className="metric-icon-wrap" style={{ color: card.accent }}>
+              {card.icon}
+            </div>
+          </div>
           <h2 className="value">{card.value}</h2>
-          <div className="meta">{card.meta}</div>
+          <div className="meta">
+            <span>{card.meta}</span>
+          </div>
         </div>
       ))}
     </div>
