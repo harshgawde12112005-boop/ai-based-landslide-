@@ -1,5 +1,5 @@
 import React from 'react';
-import { AlertTriangle, ShieldCheck, Activity, Radio, Droplets, Mountain } from 'lucide-react';
+import { AlertTriangle, Activity, Radio, Mountain } from 'lucide-react';
 
 export default function TopCards({ riskData, rainfall, soilMoisture, slope }) {
   const dynamicRisk = riskData?.overall_risk_pct ?? 0;

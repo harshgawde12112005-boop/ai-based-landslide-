@@ -331,13 +331,3 @@ def export_hazard_report(data: ExportReportRequest):
         "status": "Official Disaster Management Dispatch Ready",
         "notes": data.operator_notes,
     }
-
-
-if __name__ == "__main__":
-    import uvicorn
-    print("\n" + "=" * 55)
-    print("  [OK] Starting LandGuard AI Backend Server")
-    print("  API URL:  http://localhost:8000")
-    print("  API Docs: http://localhost:8000/docs")
-    print("=" * 55 + "\n")
-    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=True)

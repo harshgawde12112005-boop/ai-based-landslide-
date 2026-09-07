@@ -1,6 +1,6 @@
 import React from 'react';
 import confetti from 'canvas-confetti';
-import { Sliders, Cpu, Download, AlertOctagon, CheckCircle, ShieldAlert, Sparkles } from 'lucide-react';
+import { Sliders, Cpu, Download, AlertOctagon, ShieldAlert, Sparkles } from 'lucide-react';
 
 const PRESETS = [
   {

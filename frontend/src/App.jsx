@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { NavLink, Route, Routes } from 'react-router-dom';
 import confetti from 'canvas-confetti';
@@ -18,9 +18,6 @@ import {
   Search,
   Download,
   CheckCircle2,
-  AlertTriangle,
-  Send,
-  PhoneCall,
   Volume2,
   RefreshCw,
 } from 'lucide-react';
@@ -126,7 +123,7 @@ export default function App() {
       });
       setRiskData(response.data);
       setBackendOnline(true);
-    } catch (error) {
+    } catch {
       setBackendOnline(false);
       // Resilient client-side geotechnical fallback
       const rNorm = Math.min(Math.max(nextRainfall / 220, 0), 1);
@@ -253,6 +250,11 @@ export default function App() {
           </div>
 
           <div className="topbar-actions">
+            <div className="utc-clock" aria-label="Current UTC time">
+              <Clock size={14} />
+              <span>{currentTime.toISOString().slice(11, 19)} UTC</span>
+            </div>
+
             {/* Live Telemetry Mode Toggle */}
             <button
               className={`live-feed-toggle-btn ${liveMode ? 'live-on' : ''}`}
@@ -403,6 +405,7 @@ function DashboardPage({
 function AlertsPage({ riskData, selectedZone }) {
   const [filter, setFilter] = useState('ALL');
   const [search, setSearch] = useState('');
+  const [dispatchNotice, setDispatchNotice] = useState(null);
   const [alerts, setAlerts] = useState([
     {
       id: 'ALT-801',
@@ -450,7 +453,8 @@ function AlertsPage({ riskData, selectedZone }) {
 
   const dispatchEmergencyAlert = (alert) => {
     confetti({ particleCount: 40, spread: 70, origin: { y: 0.7 } });
-    alert(`📢 BROADCAST DISPATCHED: Emergency SMS and Siren Alert triggered for "${alert.zone}" (${alert.severity} Level). Response teams mobilized.`);
+    setDispatchNotice(`Broadcast dispatched for ${alert.zone}. Response teams notified.`);
+    window.setTimeout(() => setDispatchNotice(null), 4200);
   };
 
   const filteredAlerts = alerts.filter((a) => {
@@ -463,6 +467,12 @@ function AlertsPage({ riskData, selectedZone }) {
 
   return (
     <div className="page-shell">
+      {dispatchNotice && (
+        <div className="toast-notice" role="status">
+          <CheckCircle2 size={18} />
+          <span>{dispatchNotice}</span>
+        </div>
+      )}
       <div className="page-header">
         <div>
           <p className="eyebrow small">EARLY WARNING SUBSYSTEM</p>
@@ -550,8 +560,8 @@ function AlertsPage({ riskData, selectedZone }) {
 // --------------------------------------------------------------------------
 // 3. RISK HISTORY & ANALYTICS PAGE
 // --------------------------------------------------------------------------
-function HistoryPage({ riskData, rainfall, soilMoisture, slope, selectedZone }) {
-  const [historyRows, setHistoryRows] = useState([
+function HistoryPage({ riskData }) {
+  const [historyRows] = useState([
     { id: 1, time: '00:00 UTC', zone: 'Gangtok North Ridge', rain: 24, soil: 45, slope: 36, risk: '18%', fos: 2.12, level: 'LOW' },
     { id: 2, time: '03:00 UTC', zone: 'Gangtok North Ridge', rain: 48, soil: 52, slope: 36, risk: '28%', fos: 1.95, level: 'LOW' },
     { id: 3, time: '06:00 UTC', zone: 'Gangtok North Ridge', rain: 86, soil: 64, slope: 36, risk: '46%', fos: 1.62, level: 'MODERATE' },

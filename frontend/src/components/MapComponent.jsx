@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { MapContainer, TileLayer, Circle, Marker, Popup } from 'react-leaflet';
+import { MapContainer, TileLayer, Circle, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
-import { Layers, MapPin, Navigation } from 'lucide-react';
+import { Layers, MapPin } from 'lucide-react';
 
 const TILE_LAYERS = {
   osm: {
