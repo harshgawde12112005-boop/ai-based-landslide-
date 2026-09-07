@@ -71,7 +71,7 @@ export default function Simulator({
     });
 
     const reportData = {
-      title: 'LandGuard AI - Geotechnical Hazard Assessment Report',
+      title: 'SlopeWatch - Geotechnical Hazard Assessment Report',
       timestamp: new Date().toISOString(),
       zone: selectedZone?.name || 'Custom Evaluated Slope',
       state: selectedZone?.state || 'Regional',
@@ -96,7 +96,7 @@ export default function Simulator({
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `LandGuard_Advisory_${selectedZone?.name?.replace(/\s+/g, '_') || 'Assessment'}_${Date.now()}.json`;
+    a.download = `SlopeWatch_Advisory_${selectedZone?.name?.replace(/\s+/g, '_') || 'Assessment'}_${Date.now()}.json`;
     a.click();
     URL.revokeObjectURL(url);
   };
@@ -114,14 +114,14 @@ export default function Simulator({
       <div className="panel-header">
         <h3 className="panel-title">
           <Sliders size={18} style={{ color: 'var(--accent-primary)' }} />
-          What-If Scenario Simulator
+          Scenario assessment
         </h3>
       </div>
 
       {/* Preset Badges */}
       <div>
         <div style={{ fontSize: '0.74rem', color: 'var(--text-muted)', marginBottom: '6px', fontWeight: '700' }}>
-          QUICK SCENARIO PRESETS
+          STARTING CONDITIONS
         </div>
         <div className="presets-row">
           {PRESETS.map((p) => (
@@ -219,7 +219,7 @@ export default function Simulator({
         disabled={loading}
       >
         <Cpu size={18} />
-        {loading ? 'Evaluating Geotechnical AI Model...' : 'Execute Geotechnical Risk Model'}
+        {loading ? 'Updating assessment...' : 'Run risk assessment'}
       </button>
 
       {/* Insight Output Card */}
@@ -227,7 +227,7 @@ export default function Simulator({
         <div className="insight-panel">
           <div className="insight-header">
             <span style={{ fontSize: '0.74rem', textTransform: 'uppercase', letterSpacing: '0.1em', color: 'var(--text-muted)', fontWeight: '800' }}>
-              AI Prediction Diagnostic
+              Assessment note
             </span>
             <span className={`risk-level-badge ${riskData.risk_level.toLowerCase()}`}>
               {riskData.risk_level === 'CRITICAL' ? <AlertOctagon size={13} /> : <ShieldAlert size={13} />}

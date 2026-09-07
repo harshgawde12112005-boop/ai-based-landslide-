@@ -44,7 +44,7 @@ const THEMES = [
 ];
 
 export default function App() {
-  const [theme, setTheme] = useState(() => localStorage.getItem('landguard_theme') || 'dark');
+  const [theme, setTheme] = useState(() => localStorage.getItem('slopewatch_theme') || 'light');
   const [liveMode, setLiveMode] = useState(false);
   const [currentTime, setCurrentTime] = useState(new Date());
 
@@ -64,7 +64,7 @@ export default function App() {
   // Apply Theme
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', theme);
-    localStorage.setItem('landguard_theme', theme);
+    localStorage.setItem('slopewatch_theme', theme);
   }, [theme]);
 
   // Live Clock
@@ -204,7 +204,7 @@ export default function App() {
           </div>
           <div>
             <div className="brand-name">
-              LandGuard <span className="ai-tag">AI 2.0</span>
+              SlopeWatch <span className="ai-tag">FIELD OPS</span>
             </div>
             <div className="brand-subtitle">Geotechnical Resilience</div>
           </div>
@@ -244,7 +244,7 @@ export default function App() {
           <div className="topbar-left">
             <p className="eyebrow">
               <Activity size={13} />
-              AI EARTH OBSERVATORY &bull; {selectedZone ? selectedZone.name : 'Regional Sentinel'}
+              FIELD MONITORING &bull; {selectedZone ? selectedZone.name : 'Regional Sentinel'}
             </p>
             <h1>Landslide Risk Intelligence</h1>
           </div>
