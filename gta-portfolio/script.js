@@ -692,7 +692,10 @@ document.addEventListener("click", () => {
             const waves = document.getElementById("radioWaves");
             const pill = document.getElementById("reelRadioPill");
             if (waves) waves.classList.add("playing");
-            if (pill) pill.classList.add("active");
+            if (pill) {
+                pill.classList.add("playing");
+                pill.classList.add("active");
+            }
             hideAudioHint();
         }).catch(() => {});
     }
@@ -709,6 +712,9 @@ window.jumpToScreen = function(targetIndex) {
     isRolling = true;
     radio.playRollWhoosh();
 
+    // Auto-reset rolling lock after 800ms as a safety guard
+    setTimeout(() => { isRolling = false; }, 800);
+
     const screens = document.querySelectorAll(".gta-screen");
     const currentEl = screens[currentScreen];
     const targetEl = screens[targetIndex];
@@ -723,40 +729,49 @@ window.jumpToScreen = function(targetIndex) {
         setTimeout(() => flashOverlay.classList.remove("active"), 350);
     }
 
-    // 3D Roll Out
-    gsap.to(currentEl, {
-        duration: 0.55,
-        rotationY: -direction * 22,
-        rotationX: 12,
-        z: -300,
-        opacity: 0,
-        ease: "power2.inOut",
-        onComplete: () => {
-            currentEl.classList.remove("active");
-            gsap.set(currentEl, { clearProps: "all" });
-        }
-    });
+    if (typeof gsap !== "undefined" && gsap.to && gsap.fromTo) {
+        // 3D Roll Out
+        gsap.to(currentEl, {
+            duration: 0.55,
+            rotationY: -direction * 22,
+            rotationX: 12,
+            z: -300,
+            opacity: 0,
+            ease: "power2.inOut",
+            onComplete: () => {
+                currentEl.classList.remove("active");
+                gsap.set(currentEl, { clearProps: "all" });
+            }
+        });
 
-    // 3D Roll In
-    targetEl.classList.add("active");
-    gsap.fromTo(targetEl, {
-        rotationY: direction * 22,
-        rotationX: -12,
-        z: -300,
-        opacity: 0
-    }, {
-        duration: 0.65,
-        rotationY: 0,
-        rotationX: 0,
-        z: 0,
-        opacity: 1,
-        ease: "power3.out",
-        onComplete: () => {
-            currentScreen = targetIndex;
-            isRolling = false;
-            onScreenArrived(targetIndex);
-        }
-    });
+        // 3D Roll In
+        targetEl.classList.add("active");
+        gsap.fromTo(targetEl, {
+            rotationY: direction * 22,
+            rotationX: -12,
+            z: -300,
+            opacity: 0
+        }, {
+            duration: 0.65,
+            rotationY: 0,
+            rotationX: 0,
+            z: 0,
+            opacity: 1,
+            ease: "power3.out",
+            onComplete: () => {
+                currentScreen = targetIndex;
+                isRolling = false;
+                onScreenArrived(targetIndex);
+            }
+        });
+    } else {
+        // Pure CSS Fail-Safe Fallback
+        currentEl.classList.remove("active");
+        targetEl.classList.add("active");
+        currentScreen = targetIndex;
+        isRolling = false;
+        onScreenArrived(targetIndex);
+    }
 };
 
 function onScreenArrived(index) {
@@ -1364,16 +1379,40 @@ function setupGlobalControls() {
         }
     });
 
-    // Mouse Wheel scroll roll
-    let wheelTimeout;
+    // Mouse Wheel & Trackpad Navigation with sensitive accumulator
+    let scrollDelta = 0;
+    let wheelTimer = null;
     window.addEventListener("wheel", (e) => {
-        if (isWeaponWheelOpen) return;
-        if (wheelTimeout) return;
-        wheelTimeout = setTimeout(() => { wheelTimeout = null; }, 400);
+        if (isWeaponWheelOpen || isFullMapOpen) return;
+        scrollDelta += e.deltaY;
+        if (wheelTimer) clearTimeout(wheelTimer);
+        wheelTimer = setTimeout(() => { scrollDelta = 0; }, 200);
 
-        if (e.deltaY > 30) {
+        if (scrollDelta > 45) {
+            scrollDelta = 0;
             if (currentScreen < totalScreens - 1) jumpToScreen(currentScreen + 1);
-        } else if (e.deltaY < -30) {
+        } else if (scrollDelta < -45) {
+            scrollDelta = 0;
+            if (currentScreen > 0) jumpToScreen(currentScreen - 1);
+        }
+    }, { passive: true });
+
+    // Touch Swipe Navigation for mobile & touchscreens
+    let touchStartY = 0;
+    window.addEventListener("touchstart", (e) => {
+        if (e.touches && e.touches.length > 0) {
+            touchStartY = e.touches[0].clientY;
+        }
+    }, { passive: true });
+
+    window.addEventListener("touchend", (e) => {
+        if (isWeaponWheelOpen || isFullMapOpen) return;
+        if (!e.changedTouches || e.changedTouches.length === 0) return;
+        const touchEndY = e.changedTouches[0].clientY;
+        const diffY = touchStartY - touchEndY;
+        if (diffY > 40) {
+            if (currentScreen < totalScreens - 1) jumpToScreen(currentScreen + 1);
+        } else if (diffY < -40) {
             if (currentScreen > 0) jumpToScreen(currentScreen - 1);
         }
     }, { passive: true });
