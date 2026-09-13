@@ -1,0 +1,1266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HARSH GAWDE // GTA VI VICE CITY CINEMATIC PORTFOLIO</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="assets/profile.png">
+    
+    <!-- Meta tags -->
+    <meta name="description" content="Harsh Gawde - Java Software Development & AI/Data Science Specialist. GTA VI Vice City Themed Cinematic Portfolio.">
+    <meta property="og:title" content="Harsh Gawde | GTA VI Dossier">
+    <meta property="og:description" content="Cinematic GTA VI portfolio with live HUD, 3D tilted minimap, weapon loadout, and mission passed milestones.">
+    <meta property="og:image" content="assets/char_boardwalk.jpg">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Caveat:wght@700&family=Chakra+Petch:ital,wght@0,400;0,600;0,700;1,700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Satisfy&family=Teko:wght@500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome 6 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Cinematic CRT Scanlines & Screen Vignette Overlay -->
+    <div class="screen-overlay">
+        <div class="scanlines"></div>
+        <div class="vignette"></div>
+        <div class="chromatic-aberration"></div>
+    </div>
+
+    <!-- Police 5-Star Flashing Siren Screen -->
+    <div class="police-siren-overlay" id="policeSirenOverlay"></div>
+
+    <!-- 3D Camera Roll Transition Glitch & Flash Overlay -->
+    <div class="roll-flash-overlay" id="rollFlashOverlay"></div>
+
+    <!-- Official GTA Theme Song Audio Stream -->
+    <audio id="gtaThemeAudio" src="assets/gta_theme.mp3" preload="auto" loop></audio>
+
+    <!-- ============================================== -->
+    <!-- REEL HUD: TOP-CENTER (RADIO PILL & COUNTDOWN)  -->
+    <!-- ============================================== -->
+    <div class="reel-hud-top-center">
+        <div class="reel-radio-controls-row">
+            <!-- Radio Pill 104.9 -->
+            <button class="reel-radio-pill" id="reelRadioPill" title="Toggle Vice City Theme Radio [T]" onclick="toggleViceCityRadio()">
+                <div class="radio-waves" id="radioWaves">
+                    <span class="wave-bar bar-1"></span>
+                    <span class="wave-bar bar-2"></span>
+                    <span class="wave-bar bar-3"></span>
+                    <span class="wave-bar bar-4"></span>
+                </div>
+                <span class="radio-freq">104.9</span>
+            </button>
+
+            <!-- Dedicated Music Mute / Unmute Button -->
+            <button class="reel-mute-btn" id="reelMuteBtn" title="Mute / Unmute GTA Theme [M]" onclick="toggleMusicMute()">
+                <i class="fa-solid fa-volume-high" id="muteIcon"></i>
+                <span id="muteLabel">MUTE</span>
+            </button>
+        </div>
+
+        <!-- Leonida Drops In Live Countdown -->
+        <div class="reel-countdown-wrap">
+            <span class="countdown-label">LEONIDA DROPS IN</span>
+            <div class="countdown-digits" id="reelCountdownDigits">
+                <span class="cd-item"><strong id="cdDays">108</strong> <small>D</small></span>
+                <span class="cd-sep">:</span>
+                <span class="cd-item"><strong id="cdHours">15</strong> <small>H</small></span>
+                <span class="cd-sep">:</span>
+                <span class="cd-item"><strong id="cdMins">33</strong> <small>M</small></span>
+                <span class="cd-sep">:</span>
+                <span class="cd-item"><strong id="cdSecs">18</strong> <small>S</small></span>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================== -->
+    <!-- REEL HUD: TOP-RIGHT (CLOCK, CASH, WEAPON, ETC) -->
+    <!-- ============================================== -->
+    <div class="reel-hud-top-right">
+        <div class="reel-hud-stats-row">
+            <!-- Live Clock -->
+            <span class="reel-clock-num" id="reelClock">18:56</span>
+            <!-- Cash in GTA Green with dynamic flyout -->
+            <div class="reel-cash-wrapper" id="reelCashWrapper" onclick="collectCashBounty()" title="Click to claim Freelance Cash Payout // Current Bounty">
+                <span class="reel-cash-num" id="cashAmount">$1,875,659</span>
+                <span class="reel-cash-flyout" id="cashFlyout"></span>
+                <span class="cash-click-badge">+ EARN</span>
+            </div>
+            <!-- Weapon Slot -->
+            <div class="reel-weapon-slot" id="reelWeaponSlot" title="Equipped Tech Weapon [Click or TAB for 8-Way Wheel]" onclick="openWeaponWheel()">
+                <span class="weapon-tag" id="hudWeaponTag">[ S ]</span>
+                <span class="weapon-ammo" id="hudWeaponAmmo">100</span>
+            </div>
+        </div>
+
+        <!-- Health & Armor bars -->
+        <div class="reel-vitals-strip">
+            <div class="reel-vital health" title="Health: Core Java & Backend Architecture">
+                <div class="vital-fill" id="reelHealthFill" style="width: 100%;"></div>
+            </div>
+            <div class="reel-vital armor" title="Armor: AI & Data Science Mastery">
+                <div class="vital-fill" id="reelArmorFill" style="width: 88%;"></div>
+            </div>
+        </div>
+
+        <!-- 5 Wanted Stars (Interactive Police Heat Level) -->
+        <div class="reel-stars-row" id="wantedStars" title="Click star or press 'W' to toggle Police Wanted Level">
+            <i class="fa-solid fa-star star active flashing" data-star="1" onclick="setWantedLevel(1)" title="1 Star: Minor Infraction"></i>
+            <i class="fa-solid fa-star star active flashing" data-star="2" onclick="setWantedLevel(2)" title="2 Stars: Patrol Squad Dispatched"></i>
+            <i class="fa-solid fa-star star active flashing" data-star="3" onclick="setWantedLevel(3)" title="3 Stars: SWAT En Route"></i>
+            <i class="fa-solid fa-star star" data-star="4" onclick="setWantedLevel(4)" title="4 Stars: FBI Tactical Strike"></i>
+            <i class="fa-solid fa-star star" data-star="5" onclick="setWantedLevel(5)" title="5 Stars: Military & Choppers Active"></i>
+        </div>
+
+        <!-- ESC — BACK TO MENU Button -->
+        <button class="reel-esc-btn hidden" id="reelEscBtn" onclick="jumpToScreen(0)">
+            <i class="fa-solid fa-arrow-left"></i> ESC — BACK TO MENU
+        </button>
+    </div>
+
+    <!-- ============================================== -->
+    <!-- REEL HUD: BOTTOM-LEFT (3D TILTED MINIMAP & OBJ)-->
+    <!-- ============================================== -->
+    <div class="reel-hud-bottom-left">
+        <!-- 3D Perspective Tilted Rectangular Minimap (Clickable to Open Full GPS Map) -->
+        <div class="reel-minimap-wrapper" id="reelMinimapWrapper" title="Vice City GPS Satellite Radar [Click or press 'P' to open Full Map]" onclick="openFullMap()">
+            <div class="reel-minimap-card" id="reelMinimapCard">
+                <svg class="reel-minimap-svg" viewBox="0 0 220 140" preserveAspectRatio="none">
+                    <defs>
+                        <linearGradient id="gridGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#0a1832" stop-opacity="0.95"/>
+                            <stop offset="100%" stop-color="#040a17" stop-opacity="0.98"/>
+                        </linearGradient>
+                        <filter id="neonRouteGlow" x="-20%" y="-20%" width="140%" height="140%">
+                            <feDropShadow dx="0" dy="0" stdDeviation="3" flood-color="#00f0ff" flood-opacity="0.8"/>
+                        </filter>
+                    </defs>
+                    <rect width="220" height="140" fill="url(#gridGrad)"/>
+                    <!-- Road grid lines -->
+                    <g class="map-grid-lines" stroke="rgba(0, 240, 255, 0.18)" stroke-width="1">
+                        <line x1="20" y1="0" x2="20" y2="140"/>
+                        <line x1="60" y1="0" x2="60" y2="140"/>
+                        <line x1="100" y1="0" x2="100" y2="140"/>
+                        <line x1="140" y1="0" x2="140" y2="140"/>
+                        <line x1="180" y1="0" x2="180" y2="140"/>
+                        <line x1="0" y1="25" x2="220" y2="25"/>
+                        <line x1="0" y1="55" x2="220" y2="55"/>
+                        <line x1="0" y1="85" x2="220" y2="85"/>
+                        <line x1="0" y1="115" x2="220" y2="115"/>
+                    </g>
+                    <!-- Coastline / Island polygon -->
+                    <path d="M 0 30 Q 70 20, 130 50 T 220 70 L 220 140 L 0 140 Z" fill="rgba(0, 200, 255, 0.08)"/>
+                    <!-- Diagonal highway avenue -->
+                    <line x1="0" y1="130" x2="210" y2="10" stroke="#1a3d6d" stroke-width="4"/>
+                    <line x1="0" y1="130" x2="210" y2="10" stroke="#ff5500" stroke-width="1.5" stroke-dasharray="4,3"/>
+                    <!-- Bright GPS Cyan Mission Route -->
+                    <path d="M 35 125 L 90 90 L 165 40 L 200 25" fill="none" stroke="#00f0ff" stroke-width="2.5" filter="url(#neonRouteGlow)"/>
+                    <!-- Mission Objective Destination Blip -->
+                    <circle cx="200" cy="25" r="4.5" fill="#ffaa00" stroke="#fff" stroke-width="1.5"/>
+                    <!-- Player Arrow Blip -->
+                    <g class="map-player-blip" transform="translate(35, 125)">
+                        <circle cx="0" cy="0" r="6" fill="#ff007f" opacity="0.4" class="player-pulse-ring"/>
+                        <circle cx="0" cy="0" r="3.5" fill="#ff007f" stroke="#ffffff" stroke-width="1.5"/>
+                    </g>
+                </svg>
+                <!-- Minimap Hover Expand Prompt -->
+                <div class="minimap-expand-hint"><i class="fa-solid fa-expand"></i> FULL GPS [P]</div>
+                <!-- North Compass Indicator in corner -->
+                <div class="reel-map-compass">
+                    <span class="compass-arrow">▲</span>
+                    <span class="compass-letter">N</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Current Objective Text directly to the right of minimap -->
+        <div class="reel-objective-box">
+            <span class="reel-objective-label" id="reelObjectiveLabel">CURRENT OBJECTIVE</span>
+            <h4 class="reel-objective-text" id="reelObjectiveText">PRESS START GAME TO BEGIN</h4>
+        </div>
+    </div>
+
+    <!-- ============================================== -->
+    <!-- REEL HUD: BOTTOM FOOTER & KEYBOARD PROMPTS    -->
+    <!-- ============================================== -->
+    <div class="reel-hud-footer">
+        <div class="reel-footer-tagline">Vice City Inspired — Build Different — Stay Legendary</div>
+        <div class="reel-controls-bar">
+            <span><kbd>ENTER</kbd> SELECT</span>
+            <span class="sep">|</span>
+            <span><kbd>ESC</kbd> BACK</span>
+            <span class="sep">|</span>
+            <span><kbd>TAB</kbd> LOADOUT</span>
+            <span class="sep">|</span>
+            <span><kbd>P</kbd> MAP</span>
+            <span class="sep">|</span>
+            <span><kbd>W</kbd> WANTED</span>
+            <span class="sep">|</span>
+            <span><kbd>M</kbd> MUTE</span>
+        </div>
+    </div>
+
+    <!-- ============================================== -->
+    <!-- MISSION PASSED FULL BANNER (ROCKSTAR STYLE) -->
+    <!-- ============================================== -->
+    <div class="mission-passed-banner" id="missionPassedBanner">
+        <div class="mp-inner">
+            <div class="mp-gold-stripe top"></div>
+            <h1 class="mp-headline">MISSION PASSED!</h1>
+            <div class="mp-respect-line">RESPECT <span class="text-green">+50</span></div>
+            <div class="mp-reward-line" id="mpReward">REWARD: + $100,000</div>
+            <div class="mp-detail-line" id="mpDetail">Milestone Cleared Successfully</div>
+            <div class="mp-gold-stripe bottom"></div>
+        </div>
+    </div>
+
+    <!-- ============================================== -->
+    <!-- AUTHENTIC 8-WAY RADIAL WEAPON WHEEL MODAL      -->
+    <!-- ============================================== -->
+    <div class="radial-weapon-wheel-overlay" id="weaponWheelOverlay" onclick="closeWeaponWheelOnOutside(event)">
+        <div class="radial-wheel-container">
+            <div class="radial-wheel-header">
+                <h2>SELECT TECH ARSENAL</h2>
+                <p>[ CLICK OR HOVER SECTOR TO EQUIP // PRESS <kbd>TAB</kbd> OR <kbd>ESC</kbd> TO CLOSE ]</p>
+            </div>
+
+            <div class="radial-wheel-body">
+                <!-- Circular Radial Ring with 8 Interactive Wedges -->
+                <div class="radial-disc" id="radialDisc">
+                    <button class="radial-slice-slot active" data-index="0" data-name="Java 21 Enterprise" data-cat="HEAVY AUTOMATIC" data-icon="fa-brands fa-java" data-ammo="999" data-dmg="98" data-spd="92" data-acc="96" data-rng="90" data-desc="Core Java, OOPs Architecture, Multithreading & High-Concurrency Systems">
+                        <i class="fa-brands fa-java"></i>
+                        <span>JAVA 21</span>
+                    </button>
+                    <button class="radial-slice-slot" data-index="1" data-name="Python ML Engine" data-cat="SPECIAL RIFLE" data-icon="fa-brands fa-python" data-ammo="999" data-dmg="92" data-spd="88" data-acc="95" data-rng="94" data-desc="Data Science, Machine Learning Pipelines, Pandas, NumPy, OpenCV Vision">
+                        <i class="fa-brands fa-python"></i>
+                        <span>PYTHON ML</span>
+                    </button>
+                    <button class="radial-slice-slot" data-index="2" data-name="MySQL & Relational SQL" data-cat="PRECISION SNIPER" data-icon="fa-solid fa-database" data-ammo="999" data-dmg="94" data-spd="90" data-acc="98" data-rng="92" data-desc="Complex Relational Queries, Schema Optimization, ACID Transactions & Indexing">
+                        <i class="fa-solid fa-database"></i>
+                        <span>SQL DB</span>
+                    </button>
+                    <button class="radial-slice-slot" data-index="3" data-name="React.js & MERN" data-cat="RAPID SMG" data-icon="fa-brands fa-react" data-ammo="999" data-dmg="90" data-spd="96" data-acc="92" data-rng="88" data-desc="Component Architecture, State Machines, Responsive High-Performance Frontends">
+                        <i class="fa-brands fa-react"></i>
+                        <span>REACT MERN</span>
+                    </button>
+                    <button class="radial-slice-slot" data-index="4" data-name="C / C++ Systems" data-cat="TACTICAL MELEE" data-icon="fa-solid fa-code" data-ammo="999" data-dmg="96" data-spd="85" data-acc="94" data-rng="80" data-desc="Low-Level Memory Structures, Algorithms, Computational Optimization">
+                        <i class="fa-solid fa-code"></i>
+                        <span>C / C++</span>
+                    </button>
+                    <button class="radial-slice-slot" data-index="5" data-name="Google Cloud Platform" data-cat="EXPLOSIVE CLOUD" data-icon="fa-brands fa-google" data-ammo="999" data-dmg="91" data-spd="89" data-acc="93" data-rng="95" data-desc="GCP Arcade Certified, Cloud Architecture, Serverless Workflows, Linux Shell">
+                        <i class="fa-brands fa-google"></i>
+                        <span>GCP CLOUD</span>
+                    </button>
+                    <button class="radial-slice-slot" data-index="6" data-name="Spring Boot Framework" data-cat="ASSAULT RIFLE" data-icon="fa-solid fa-leaf" data-ammo="999" data-dmg="95" data-spd="91" data-acc="93" data-rng="92" data-desc="Enterprise REST APIs, Microservices, Security, Dependency Injection">
+                        <i class="fa-solid fa-leaf"></i>
+                        <span>SPRING BOOT</span>
+                    </button>
+                    <button class="radial-slice-slot" data-index="7" data-name="Git & Linux Shell" data-cat="SIDEARM TACTICAL" data-icon="fa-brands fa-git-alt" data-ammo="999" data-dmg="88" data-spd="95" data-acc="96" data-rng="90" data-desc="Distributed Version Control, GitHub Actions, Linux Bash Shell Operations">
+                        <i class="fa-brands fa-git-alt"></i>
+                        <span>GIT & BASH</span>
+                    </button>
+
+                    <!-- Center Rockstar Weapon Reticle Display -->
+                    <div class="radial-center-hub">
+                        <div class="hub-weapon-icon-wrap">
+                            <i class="fa-brands fa-java" id="hubWeaponIcon"></i>
+                        </div>
+                        <div class="hub-weapon-title" id="hubWeaponTitle">JAVA 21 ENTERPRISE</div>
+                        <div class="hub-weapon-cat" id="hubWeaponCat">HEAVY AUTOMATIC</div>
+                        <div class="hub-ammo-display">
+                            <span class="hub-ammo-num">999</span>
+                            <span class="hub-ammo-div">/</span>
+                            <span class="hub-ammo-inf">∞</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Side Attributes Panel -->
+                <div class="radial-stats-panel">
+                    <h3 class="stat-panel-title" id="statPanelWeaponName">JAVA 21 ENTERPRISE</h3>
+                    <p class="stat-panel-desc" id="statPanelDesc">Core Java, OOPs Architecture, Multithreading & High-Concurrency Systems</p>
+
+                    <div class="stat-meter-item">
+                        <div class="meter-meta">
+                            <span>PROFICIENCY (DAMAGE)</span>
+                            <strong id="meterDmgVal">98%</strong>
+                        </div>
+                        <div class="meter-track"><div class="meter-fill fill-pink" id="meterDmgFill" style="width: 98%;"></div></div>
+                    </div>
+
+                    <div class="stat-meter-item">
+                        <div class="meter-meta">
+                            <span>VELOCITY (FIRE RATE)</span>
+                            <strong id="meterSpdVal">92%</strong>
+                        </div>
+                        <div class="meter-track"><div class="meter-fill fill-yellow" id="meterSpdFill" style="width: 92%;"></div></div>
+                    </div>
+
+                    <div class="stat-meter-item">
+                        <div class="meter-meta">
+                            <span>ACCURACY (CODE QUALITY)</span>
+                            <strong id="meterAccVal">96%</strong>
+                        </div>
+                        <div class="meter-track"><div class="meter-fill fill-cyan" id="meterAccFill" style="width: 96%;"></div></div>
+                    </div>
+
+                    <div class="stat-meter-item">
+                        <div class="meter-meta">
+                            <span>SCOPE (SCALABILITY)</span>
+                            <strong id="meterRngVal">90%</strong>
+                        </div>
+                        <div class="meter-track"><div class="meter-fill fill-green" id="meterRngFill" style="width: 90%;"></div></div>
+                    </div>
+
+                    <div class="weapon-equip-action-row">
+                        <button class="gta-action-btn primary-btn" onclick="equipAndLaunchGame()">
+                            <i class="fa-solid fa-play"></i> EQUIP LOADOUT & ENTER MISSION [ENTER]
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================== -->
+    <!-- POLICE HEAT STROBE VIGNETTE (4 & 5 STARS)      -->
+    <!-- ============================================== -->
+    <div class="police-heat-strobe" id="policeHeatStrobe"></div>
+
+    <!-- ============================================== -->
+    <!-- VICE CITY FULL SATELLITE GPS MAP MODAL [P]     -->
+    <!-- ============================================== -->
+    <div class="full-map-overlay" id="fullMapOverlay" onclick="closeFullMapOnOutside(event)">
+        <div class="full-map-window">
+            <!-- Top HUD Bar -->
+            <div class="full-map-header">
+                <div class="map-title-box">
+                    <span class="satellite-pulse-dot"></span>
+                    <h2>VICE CITY SATELLITE GPS RADAR</h2>
+                    <span class="map-sub">[ SECTOR SCAN: LEONIDA ARCHIPELAGO // LIVE MAPPING ]</span>
+                </div>
+
+                <div class="map-telemetry">
+                    <span class="tele-item"><i class="fa-solid fa-crosshairs text-cyan"></i> CURRENT: <strong id="mapTelemetryCurrent">MARINA BAYFRONT</strong></span>
+                    <span class="tele-item"><i class="fa-solid fa-satellite text-yellow"></i> LAT: <strong>25.7617° N</strong> LNG: <strong>-80.1918° W</strong></span>
+                </div>
+
+                <button class="map-close-btn" onclick="closeFullMap()" title="Close Map [ESC]">
+                    <i class="fa-solid fa-xmark"></i> ESC [EXIT]
+                </button>
+            </div>
+
+            <!-- Map Center Stage -->
+            <div class="full-map-body">
+                <!-- Interactive High-Tech Vector Grid Map -->
+                <div class="map-canvas-container">
+                    <svg class="satellite-vector-map" viewBox="0 0 1000 620" id="satelliteMapSvg">
+                        <defs>
+                            <linearGradient id="oceanGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#050b18"/>
+                                <stop offset="100%" stop-color="#02050c"/>
+                            </linearGradient>
+                            <linearGradient id="islandGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#0d1f3d"/>
+                                <stop offset="100%" stop-color="#081427"/>
+                            </linearGradient>
+                            <filter id="blipGlow" x="-50%" y="-50%" width="200%" height="200%">
+                                <feDropShadow dx="0" dy="0" stdDeviation="5" flood-color="#00f0ff" flood-opacity="0.9"/>
+                            </filter>
+                        </defs>
+
+                        <!-- Background Deep Ocean -->
+                        <rect width="1000" height="620" fill="url(#oceanGrad)"/>
+
+                        <!-- Grid Coordinate Matrix Lines -->
+                        <g class="map-grid-matrix" stroke="rgba(0, 240, 255, 0.08)" stroke-width="1">
+                            <line x1="100" y1="0" x2="100" y2="620"/><line x1="200" y1="0" x2="200" y2="620"/>
+                            <line x1="300" y1="0" x2="300" y2="620"/><line x1="400" y1="0" x2="400" y2="620"/>
+                            <line x1="500" y1="0" x2="500" y2="620"/><line x1="600" y1="0" x2="600" y2="620"/>
+                            <line x1="700" y1="0" x2="700" y2="620"/><line x1="800" y1="0" x2="800" y2="620"/>
+                            <line x1="900" y1="0" x2="900" y2="620"/>
+                            <line x1="0" y1="60" x2="1000" y2="60"/><line x1="0" y1="130" x2="1000" y2="130"/>
+                            <line x1="0" y1="200" x2="1000" y2="200"/><line x1="0" y1="270" x2="1000" y2="270"/>
+                            <line x1="0" y1="340" x2="1000" y2="340"/><line x1="0" y1="410" x2="1000" y2="410"/>
+                            <line x1="0" y1="480" x2="1000" y2="480"/><line x1="0" y1="550" x2="1000" y2="550"/>
+                        </g>
+
+                        <!-- Islands: West Mainland & East Beach Islands -->
+                        <path d="M 60,70 L 320,60 L 380,180 L 340,320 L 370,480 L 260,570 L 100,550 L 50,420 Z" 
+                              fill="url(#islandGrad)" stroke="rgba(0, 240, 255, 0.45)" stroke-width="2"/>
+
+                        <!-- Starfish Island in Bay -->
+                        <polygon points="460,260 540,240 570,320 480,340" 
+                                 fill="url(#islandGrad)" stroke="rgba(255, 0, 127, 0.5)" stroke-width="2"/>
+
+                        <!-- East Beach Island (Ocean Beach, Washington Beach, Vice Point) -->
+                        <path d="M 660,50 L 880,40 L 930,220 L 890,440 L 810,580 L 710,540 L 740,360 L 680,200 Z" 
+                              fill="url(#islandGrad)" stroke="rgba(0, 240, 255, 0.45)" stroke-width="2"/>
+
+                        <!-- Bridges Connecting Islands -->
+                        <line x1="370" y1="140" x2="680" y2="130" stroke="#00d2be" stroke-width="4" stroke-dasharray="8,4"/>
+                        <line x1="380" y1="280" x2="460" y2="280" stroke="#ffaa00" stroke-width="4"/>
+                        <line x1="570" y1="290" x2="720" y2="290" stroke="#ffaa00" stroke-width="4"/>
+                        <line x1="330" y1="460" x2="760" y2="480" stroke="#00f0ff" stroke-width="5" stroke-dasharray="10,5"/>
+
+                        <!-- Highway Main Arteries -->
+                        <path d="M 120,530 Q 240,350 200,100" fill="none" stroke="rgba(255, 170, 0, 0.35)" stroke-width="3"/>
+                        <path d="M 750,520 Q 860,300 800,80" fill="none" stroke="rgba(255, 0, 127, 0.35)" stroke-width="3"/>
+
+                        <!-- Live GPS Connection Route -->
+                        <path id="mapGpsLiveRoute" d="M 220,500 Q 450,400 780,440" fill="none" stroke="#00f0ff" stroke-width="3.5" filter="url(#blipGlow)" stroke-dasharray="8,5"/>
+
+                        <!-- 8 INTERACTIVE MISSION WAYPOINTS -->
+                        <g class="map-waypoint-group" id="mapWp0" data-screen="0" onclick="fastTravelToScreen(0)" onmouseenter="previewMapWaypoint(0)">
+                            <circle cx="220" cy="500" r="16" class="wp-pulse-ring ring-cyan"/>
+                            <circle cx="220" cy="500" r="10" class="wp-core-dot dot-cyan"/>
+                            <text x="220" y="530" class="wp-label">0. BAYFRONT (MENU)</text>
+                        </g>
+
+                        <g class="map-waypoint-group" id="mapWp1" data-screen="1" onclick="fastTravelToScreen(1)" onmouseenter="previewMapWaypoint(1)">
+                            <circle cx="780" cy="460" r="16" class="wp-pulse-ring ring-pink"/>
+                            <circle cx="780" cy="460" r="10" class="wp-core-dot dot-pink"/>
+                            <text x="780" y="490" class="wp-label">1. OCEAN BEACH (ABOUT)</text>
+                        </g>
+
+                        <g class="map-waypoint-group" id="mapWp2" data-screen="2" onclick="fastTravelToScreen(2)" onmouseenter="previewMapWaypoint(2)">
+                            <circle cx="240" cy="140" r="16" class="wp-pulse-ring ring-cyan"/>
+                            <circle cx="240" cy="140" r="10" class="wp-core-dot dot-cyan"/>
+                            <text x="240" y="120" class="wp-label">2. DOWNTOWN HQ (SKILLS)</text>
+                        </g>
+
+                        <g class="map-waypoint-group" id="mapWp3" data-screen="3" onclick="fastTravelToScreen(3)" onmouseenter="previewMapWaypoint(3)">
+                            <circle cx="140" cy="400" r="16" class="wp-pulse-ring ring-green"/>
+                            <circle cx="140" cy="400" r="10" class="wp-core-dot dot-green"/>
+                            <text x="140" y="430" class="wp-label">3. VICE PORT (PROJECTS)</text>
+                        </g>
+
+                        <g class="map-waypoint-group" id="mapWp4" data-screen="4" onclick="fastTravelToScreen(4)" onmouseenter="previewMapWaypoint(4)">
+                            <circle cx="510" cy="290" r="16" class="wp-pulse-ring ring-purple"/>
+                            <circle cx="510" cy="290" r="10" class="wp-core-dot dot-purple"/>
+                            <text x="510" y="320" class="wp-label">4. STARFISH MANSION (EXP)</text>
+                        </g>
+
+                        <g class="map-waypoint-group" id="mapWp5" data-screen="5" onclick="fastTravelToScreen(5)" onmouseenter="previewMapWaypoint(5)">
+                            <circle cx="820" cy="140" r="16" class="wp-pulse-ring ring-yellow"/>
+                            <circle cx="820" cy="140" r="10" class="wp-core-dot dot-yellow"/>
+                            <text x="820" y="120" class="wp-label">5. VICE POINT (TROPHIES)</text>
+                        </g>
+
+                        <g class="map-waypoint-group" id="mapWp6" data-screen="6" onclick="fastTravelToScreen(6)" onmouseenter="previewMapWaypoint(6)">
+                            <circle cx="180" cy="260" r="16" class="wp-pulse-ring ring-yellow"/>
+                            <circle cx="180" cy="260" r="10" class="wp-core-dot dot-yellow"/>
+                            <text x="180" y="240" class="wp-label">6. ESCOBAR ACADEMY</text>
+                        </g>
+
+                        <g class="map-waypoint-group" id="mapWp7" data-screen="7" onclick="fastTravelToScreen(7)" onmouseenter="previewMapWaypoint(7)">
+                            <circle cx="830" cy="300" r="16" class="wp-pulse-ring ring-cyan"/>
+                            <circle cx="830" cy="300" r="10" class="wp-core-dot dot-cyan"/>
+                            <text x="830" y="330" class="wp-label">7. CAUSEWAY (CONTACT)</text>
+                        </g>
+
+                        <!-- Live Player Marker -->
+                        <g id="mapLivePlayerMarker" transform="translate(220, 500)">
+                            <circle cx="0" cy="0" r="22" class="player-sonar-ring"/>
+                            <polygon points="0,-12 8,8 0,4 -8,8" fill="#ff007f" stroke="#ffffff" stroke-width="2"/>
+                            <text x="12" y="-14" fill="#ff007f" font-family="'ChaletCompanie', monospace" font-size="11" font-weight="bold">YOU [HARSH]</text>
+                        </g>
+                    </svg>
+                </div>
+
+                <!-- Right-Hand Tactical Intel Sidebar -->
+                <div class="map-tactical-sidebar">
+                    <div class="sidebar-card">
+                        <span class="tac-badge" id="tacBadge">[ DISTRICT INTEL ]</span>
+                        <h3 class="tac-title" id="tacTitle">OCEAN BEACH</h3>
+                        <div class="tac-sub" id="tacSub">MISSION 01: ABOUT ME</div>
+                        <p class="tac-desc" id="tacDesc">
+                            Discover the origin story, tech philosophy, and full-stack engineering profile of Harsh Gawde.
+                        </p>
+
+                        <div class="tac-stats-row">
+                            <div class="tac-stat"><small>TERRITORY</small><strong id="tacTerritory">Vice Beach</strong></div>
+                            <div class="tac-stat"><small>BOUNTY</small><strong class="text-green" id="tacBounty">+$150,000</strong></div>
+                        </div>
+
+                        <button class="gta-action-btn primary-btn fast-travel-btn" id="tacTravelBtn" onclick="fastTravelSelected()">
+                            <i class="fa-solid fa-location-arrow"></i> FAST TRAVEL [TELEPORT]
+                        </button>
+                    </div>
+
+                    <!-- Fast Travel Quick List -->
+                    <div class="fast-travel-list">
+                        <div class="ft-header">DIRECT SATELLITE DESTINATIONS</div>
+                        <button class="ft-item" onclick="fastTravelToScreen(0)"><span>0. Marina Bayfront</span><small>Menu</small></button>
+                        <button class="ft-item" onclick="fastTravelToScreen(1)"><span>1. Ocean Beach</span><small>About</small></button>
+                        <button class="ft-item" onclick="fastTravelToScreen(2)"><span>2. Downtown HQ</span><small>Skills</small></button>
+                        <button class="ft-item" onclick="fastTravelToScreen(3)"><span>3. Vice Port</span><small>Projects</small></button>
+                        <button class="ft-item" onclick="fastTravelToScreen(4)"><span>4. Starfish Island</span><small>Experience</small></button>
+                        <button class="ft-item" onclick="fastTravelToScreen(5)"><span>5. Vice Point Club</span><small>Achievements</small></button>
+                        <button class="ft-item" onclick="fastTravelToScreen(6)"><span>6. Escobar Airfield</span><small>Academy</small></button>
+                        <button class="ft-item" onclick="fastTravelToScreen(7)"><span>7. Grassrivers Causeway</span><small>Contact</small></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================== -->
+    <!-- ALL PROJECTS SHOWCASE MODAL                    -->
+    <!-- ============================================== -->
+    <div class="gta-modal-overlay" id="projectsModalOverlay" onclick="closeProjectsModalOnOutside(event)">
+        <div class="gta-modal-content wide-modal">
+            <button class="modal-close-btn" onclick="closeProjectsModal()">&times;</button>
+            <div class="modal-header">
+                <h2>PROJECTS <span class="text-cyan script-font">Showcase</span></h2>
+                <p>High-caliber full stack systems, machine learning pipelines, and cloud web architectures</p>
+            </div>
+            <div class="modal-body projects-modal-grid">
+                <!-- BeanByte Coffee Shop -->
+                <div class="modal-project-card">
+                    <div class="mp-badge text-green"><i class="fa-solid fa-circle-check"></i> LIVE PRODUCTION</div>
+                    <h3>BeanByte Coffee Shop</h3>
+                    <p>Full-Stack hospitality web application for ordering, real-time cart persistence, and dynamic catalog presentation.</p>
+                    <div class="mp-tags"><span>Java</span><span>Spring Boot</span><span>React</span><span>Render</span></div>
+                    <div class="mp-links">
+                        <a href="https://beanbyte-coffee-shop.onrender.com" target="_blank" class="modal-btn primary"><i class="fa-solid fa-arrow-up-right-from-square"></i> Live Demo</a>
+                        <a href="https://github.com/HimanshiSolankii-28/beanbyte-coffee-shop" target="_blank" class="modal-btn secondary"><i class="fa-brands fa-github"></i> GitHub</a>
+                    </div>
+                </div>
+                <!-- Portfolio VI -->
+                <div class="modal-project-card">
+                    <div class="mp-badge text-pink"><i class="fa-solid fa-gamepad"></i> GTA VI SHOWCASE</div>
+                    <h3>GTA VI Portfolio Dossier</h3>
+                    <p>Next-gen developer showcase featuring 3D camera rolls, 8-way radial weapon wheel, interactive GPS minimap, and synthwave radio.</p>
+                    <div class="mp-tags"><span>JavaScript ES6</span><span>CSS 3D</span><span>Web Audio</span><span>GSAP</span></div>
+                    <div class="mp-links">
+                        <a href="#" class="modal-btn primary"><i class="fa-solid fa-bolt"></i> Active Build</a>
+                        <a href="https://github.com/harshgawde12112005-boop" target="_blank" class="modal-btn secondary"><i class="fa-brands fa-github"></i> GitHub</a>
+                    </div>
+                </div>
+                <!-- AI Landslide Detection -->
+                <div class="modal-project-card">
+                    <div class="mp-badge text-yellow"><i class="fa-solid fa-brain"></i> DEEP LEARNING AI</div>
+                    <h3>AI Landslide Hazard Detection</h3>
+                    <p>Computer vision hazard monitoring pipeline using convolutional neural networks and geospatial terrain imagery to forecast risks.</p>
+                    <div class="mp-tags"><span>Python</span><span>OpenCV</span><span>PyTorch</span><span>GIS</span></div>
+                    <div class="mp-links">
+                        <a href="https://github.com/harshgawde12112005-boop" target="_blank" class="modal-btn secondary"><i class="fa-brands fa-github"></i> Codebase</a>
+                    </div>
+                </div>
+                <!-- BlueStock Analytics -->
+                <div class="modal-project-card">
+                    <div class="mp-badge text-cyan"><i class="fa-solid fa-chart-line"></i> FINTECH ANALYTICS</div>
+                    <h3>BlueStock Financial Analytics</h3>
+                    <p>Automated financial analytics platform processing stock market indicators, IPO performance, and database indexing.</p>
+                    <div class="mp-tags"><span>Python</span><span>MySQL</span><span>Pandas</span><span>REST APIs</span></div>
+                    <div class="mp-links">
+                        <a href="https://github.com/harshgawde12112005-boop" target="_blank" class="modal-btn secondary"><i class="fa-brands fa-github"></i> Repository</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================== -->
+    <!-- CERTIFICATES & RESUME MODAL                    -->
+    <!-- ============================================== -->
+    <div class="gta-modal-overlay" id="certsModalOverlay" onclick="closeCertsModalOnOutside(event)">
+        <div class="gta-modal-content">
+            <button class="modal-close-btn" onclick="closeCertsModal()">&times;</button>
+            <div class="modal-header">
+                <h2>ACHIEVEMENTS <span class="text-pink script-font">Unlocked</span></h2>
+                <p>Verified industry credentials and authenticated developer dossier</p>
+            </div>
+            <div class="modal-body certs-modal-body">
+                <div class="cert-list-item">
+                    <i class="fa-brands fa-google text-green cert-ico"></i>
+                    <div>
+                        <h4>Google Cloud Platform Arcade Certified</h4>
+                        <p>Cloud Shell, Compute Engine, BigQuery, Serverless Architecture</p>
+                    </div>
+                </div>
+                <div class="cert-list-item">
+                    <i class="fa-solid fa-briefcase text-cyan cert-ico"></i>
+                    <div>
+                        <h4>BlueStock.in SDE Internship Verification</h4>
+                        <p>Enterprise Java Backend, REST APIs, Schema Optimization</p>
+                    </div>
+                </div>
+                <div class="cert-list-item">
+                    <i class="fa-solid fa-chart-pie text-yellow cert-ico"></i>
+                    <div>
+                        <h4>BlueStock.in Data Analyst Internship</h4>
+                        <p>Python Pandas, Relational SQL, Analytics Reporting</p>
+                    </div>
+                </div>
+                <div class="cert-modal-download-box">
+                    <a href="assets/harsh-gawde-resume.pdf" download="Harsh_Gawde_Resume.pdf" class="reel-download-btn">
+                        <i class="fa-solid fa-download"></i> DOWNLOAD PRODUCTION ATS RESUME (PDF)
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================== -->
+    <!-- MAIN 3D CINEMATIC VIEWPORT & 8 GTA SCREENS     -->
+    <!-- ============================================== -->
+    <div class="cinematic-viewport">
+        <div class="screens-3d-stage" id="screensStage">
+
+            <!-- ------------------------------------------ -->
+            <!-- SCREEN 0: MAIN MENU & LOADOUT TECH STACK   -->
+            <!-- (MATCHING USER SCREENSHOT 1)               -->
+            <!-- ------------------------------------------ -->
+            <section class="gta-screen active" data-screen-index="0">
+                <div class="parallax-bg-layer" style="background-image: url('assets/char_boardwalk.jpg');"></div>
+                <div class="screen-gradient-overlay"></div>
+
+                <div class="reel-screen-0-layout">
+                    <!-- Left Column: Big Title & Vertical Menu -->
+                    <div class="reel-menu-col">
+                        <div class="reel-menu-header">
+                            <h1 class="reel-name-heading">HARSH<br><span>GAWDE</span></h1>
+                            <span class="reel-name-script">Portfolio</span>
+                        </div>
+
+                        <nav class="reel-vertical-menu" id="reelVerticalMenu">
+                            <button class="reel-menu-link active" data-target="start_game" id="startGameMenuBtn">
+                                <span class="menu-check-icon" id="chk-start"></span>
+                                <span class="link-cursor">›</span>
+                                <span class="link-title">START GAME</span>
+                            </button>
+                            <button class="reel-menu-link" data-target="1">
+                                <span class="menu-check-icon" id="chk-about"></span>
+                                <span class="link-cursor">›</span>
+                                <span class="link-title">ABOUT ME</span>
+                            </button>
+                            <button class="reel-menu-link" data-target="2">
+                                <span class="menu-check-icon" id="chk-skills"></span>
+                                <span class="link-cursor">›</span>
+                                <span class="link-title">SKILLS</span>
+                            </button>
+                            <button class="reel-menu-link" data-target="3">
+                                <span class="menu-check-icon" id="chk-projects"></span>
+                                <span class="link-cursor">›</span>
+                                <span class="link-title">PROJECTS</span>
+                            </button>
+                            <button class="reel-menu-link" data-target="4">
+                                <span class="menu-check-icon" id="chk-experience"></span>
+                                <span class="link-cursor">›</span>
+                                <span class="link-title">EXPERIENCE</span>
+                            </button>
+                            <button class="reel-menu-link" data-target="5">
+                                <span class="menu-check-icon" id="chk-achievements"></span>
+                                <span class="link-cursor">›</span>
+                                <span class="link-title">ACHIEVEMENTS</span>
+                            </button>
+                            <button class="reel-menu-link" data-target="6">
+                                <span class="menu-check-icon" id="chk-academy"></span>
+                                <span class="link-cursor">›</span>
+                                <span class="link-title">ACADEMY</span>
+                            </button>
+                            <button class="reel-menu-link" data-target="7">
+                                <span class="menu-check-icon" id="chk-contact"></span>
+                                <span class="link-cursor">›</span>
+                                <span class="link-title">CONTACT</span>
+                            </button>
+                            <button class="reel-menu-link exit-link" id="reelExitLink" onclick="jumpToScreen(8)">
+                                <span class="menu-check-icon"></span>
+                                <span class="link-cursor">›</span>
+                                <span class="link-title">EXIT GAME</span>
+                            </button>
+                        </nav>
+                    </div>
+                </div>
+
+                <!-- Scene Location Tag -->
+                <div class="reel-scene-location-badge">
+                    <div class="location-badge-box">
+                        <span class="loc-bracket">[</span> MARINA BAYFRONT <span class="loc-bracket">]</span>
+                    </div>
+                </div>
+
+                <!-- Bottom Right Quote -->
+                <div class="reel-screen-quote">
+                    "Code is my weapon, Creativity is my world." <span>— Harsh</span>
+                </div>
+            </section>
+
+            <!-- ------------------------------------------ -->
+            <!-- SCREEN 1: ABOUT ME                         -->
+            <!-- ------------------------------------------ -->
+            <section class="gta-screen" data-screen-index="1">
+                <div class="parallax-bg-layer" style="background-image: url('assets/char_palace.jpg');"></div>
+                <div class="screen-gradient-overlay"></div>
+
+                <div class="reel-screen-1-layout">
+                    <div class="reel-about-header">
+                        <h1 class="reel-about-title">ABOUT</h1>
+                        <span class="reel-about-script">Me</span>
+                    </div>
+
+                    <p class="reel-about-lead">
+                        Hey, I'm Harsh. A Java developer, AI/data science specialist and software engineer who builds digital systems that aren't just functional — they're scalable.
+                    </p>
+
+                    <!-- 3 Info Row Cards with Glowing Cyan Badges -->
+                    <div class="reel-info-cards-stack">
+                        <div class="reel-info-card">
+                            <div class="card-cyan-icon"><i class="fa-solid fa-graduation-cap"></i></div>
+                            <div class="card-meta">
+                                <span class="card-tag">ACADEMICS</span>
+                                <span class="card-val">B.Tech AI & Data Science (3rd Year, CDGI Indore)</span>
+                            </div>
+                        </div>
+
+                        <div class="reel-info-card">
+                            <div class="card-cyan-icon"><i class="fa-solid fa-location-dot"></i></div>
+                            <div class="card-meta">
+                                <span class="card-tag">LOCATION</span>
+                                <span class="card-val">Indore, Madhya Pradesh, India</span>
+                            </div>
+                        </div>
+
+                        <div class="reel-info-card">
+                            <div class="card-cyan-icon"><i class="fa-solid fa-bolt"></i></div>
+                            <div class="card-meta">
+                                <span class="card-tag">STATUS</span>
+                                <span class="card-val">Available for Software Engineer & AI Roles</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Orange-Gold Gradient Button: VIEW JOURNEY > -->
+                    <div class="reel-about-cta">
+                        <button class="reel-orange-btn" onclick="jumpToScreen(4)">
+                            <span>VIEW JOURNEY</span>
+                            <i class="fa-solid fa-chevron-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Character Location Badge -->
+                <div class="reel-character-badge">
+                    <div class="char-badge-inner">
+                        <span class="badge-brackets">[ | OCEAN DRIVE | ]</span>
+                        <span class="badge-sub">Vice Beach</span>
+                    </div>
+                </div>
+
+                <!-- Large Watermark: MISSION PASSED Respect + -->
+                <div class="reel-watermark">
+                    <span class="wm-title">MISSION PASSED</span>
+                    <span class="wm-respect">Respect +</span>
+                </div>
+
+                <!-- Bottom Right Quote -->
+                <div class="reel-screen-quote">
+                    "Code is my weapon, Creativity is my world." <span>— Harsh</span>
+                </div>
+            </section>
+
+            <!-- ------------------------------------------ -->
+            <!-- SCREEN 2: SKILLS (NEW AESTHETIC ARTWORK)   -->
+            <!-- ------------------------------------------ -->
+            <section class="gta-screen" data-screen-index="2">
+                <div class="parallax-bg-layer" style="background-image: url('assets/bg_rooftop.jpg');"></div>
+                <div class="screen-gradient-overlay"></div>
+
+                <div class="reel-screen-2-layout">
+                    <div class="reel-screen-header">
+                        <h1 class="reel-screen-title">SKILLS</h1>
+                        <span class="reel-screen-script script-cyan">Arsenal</span>
+                    </div>
+
+                    <p class="reel-screen-lead">
+                        High-caliber programming foundations, database engines, and production cloud infrastructure.
+                    </p>
+
+                    <div class="reel-skills-grid">
+                        <div class="skill-meter-card">
+                            <div class="sm-head"><i class="fa-brands fa-java text-yellow"></i><strong>CORE JAVA 21 & OOPS</strong><span class="text-pink">98%</span></div>
+                            <div class="sm-track"><div class="sm-fill fill-pink" style="width: 98%;"></div></div>
+                            <span class="sm-desc">Multithreading, OOPs, Collections, JVM Optimization</span>
+                        </div>
+
+                        <div class="skill-meter-card">
+                            <div class="sm-head"><i class="fa-solid fa-database text-cyan"></i><strong>MYSQL & RELATIONAL SQL</strong><span class="text-cyan">94%</span></div>
+                            <div class="sm-track"><div class="sm-fill fill-cyan" style="width: 94%;"></div></div>
+                            <span class="sm-desc">Complex Joins, Schema Indexing, ACID Transactions</span>
+                        </div>
+
+                        <div class="skill-meter-card">
+                            <div class="sm-head"><i class="fa-brands fa-python text-yellow"></i><strong>PYTHON & DATA SCIENCE</strong><span class="text-yellow">92%</span></div>
+                            <div class="sm-track"><div class="sm-fill fill-yellow" style="width: 92%;"></div></div>
+                            <span class="sm-desc">Pandas, NumPy, Machine Learning Pipelines, OpenCV</span>
+                        </div>
+
+                        <div class="skill-meter-card">
+                            <div class="sm-head"><i class="fa-brands fa-react text-cyan"></i><strong>REACT.JS & MERN STACK</strong><span class="text-green">90%</span></div>
+                            <div class="sm-track"><div class="sm-fill fill-green" style="width: 90%;"></div></div>
+                            <span class="sm-desc">Responsive Component Trees, Modern Hooks, REST APIs</span>
+                        </div>
+
+                        <div class="skill-meter-card">
+                            <div class="sm-head"><i class="fa-solid fa-code text-pink"></i><strong>C / C++ & DSA</strong><span class="text-pink">92%</span></div>
+                            <div class="sm-track"><div class="sm-fill fill-pink" style="width: 92%;"></div></div>
+                            <span class="sm-desc">Data Structures, Algorithms, Memory Management</span>
+                        </div>
+
+                        <div class="skill-meter-card">
+                            <div class="sm-head"><i class="fa-brands fa-google text-green"></i><strong>GOOGLE CLOUD & DEVOPS</strong><span class="text-green">90%</span></div>
+                            <div class="sm-track"><div class="sm-fill fill-green" style="width: 90%;"></div></div>
+                            <span class="sm-desc">GCP Certified Arcade, Git Actions, Linux Shell</span>
+                        </div>
+                    </div>
+
+                    <div class="reel-skills-actions">
+                        <button class="reel-cyan-btn" onclick="openWeaponWheel()">
+                            <i class="fa-solid fa-crosshairs"></i> OPEN 8-WAY WEAPON WHEEL [TAB]
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Scene Location Tag -->
+                <div class="reel-scene-location-badge">
+                    <div class="location-badge-box">
+                        <span class="loc-bracket">[</span> DOWNTOWN ROOFTOP | Vice City <span class="loc-bracket">]</span>
+                    </div>
+                </div>
+
+                <!-- Bottom Right Quote -->
+                <div class="reel-screen-quote">
+                    "Code is my weapon, Creativity is my world." <span>— Harsh</span>
+                </div>
+            </section>
+
+            <!-- ------------------------------------------ -->
+            <!-- SCREEN 3: PROJECTS (SHOWCASE - USER REEL)  -->
+            <!-- (MATCHING USER SCREENSHOT 2)               -->
+            <!-- ------------------------------------------ -->
+            <section class="gta-screen" data-screen-index="3">
+                <div class="parallax-bg-layer" style="background-image: url('assets/char_poolside.jpg');"></div>
+                <div class="screen-gradient-overlay"></div>
+
+                <div class="reel-screen-showcase-layout">
+                    <div class="reel-screen-header">
+                        <h1 class="reel-screen-title">PROJECTS</h1>
+                        <span class="reel-screen-script script-cyan">Showcase</span>
+                    </div>
+
+                    <!-- 4 Vertical Cards Stack (Exactly like Screenshot 2) -->
+                    <div class="reel-showcase-cards-stack">
+                        <div class="reel-showcase-card" onclick="window.open('https://beanbyte-coffee-shop.onrender.com', '_blank')">
+                            <div class="sc-icon-box cyan-box"><i class="fa-solid fa-mug-hot"></i></div>
+                            <div class="sc-meta">
+                                <h3 class="sc-title">BEANBYTE COFFEE</h3>
+                                <p class="sc-sub">Full-stack smart POS & ordering cafe system</p>
+                            </div>
+                        </div>
+
+                        <div class="reel-showcase-card" onclick="openProjectsModal()">
+                            <div class="sc-icon-box teal-box"><i class="fa-solid fa-gamepad"></i></div>
+                            <div class="sc-meta">
+                                <h3 class="sc-title">PORTFOLIO VI</h3>
+                                <p class="sc-sub">GTA VI inspired next-gen cinematic showcase</p>
+                            </div>
+                        </div>
+
+                        <div class="reel-showcase-card" onclick="openProjectsModal()">
+                            <div class="sc-icon-box pink-box"><i class="fa-solid fa-brain"></i></div>
+                            <div class="sc-meta">
+                                <h3 class="sc-title">AI LANDSLIDE DETECTION</h3>
+                                <p class="sc-sub">Deep learning & geospatial computer vision SaaS</p>
+                            </div>
+                        </div>
+
+                        <div class="reel-showcase-card" onclick="openProjectsModal()">
+                            <div class="sc-icon-box purple-box"><i class="fa-solid fa-chart-line"></i></div>
+                            <div class="sc-meta">
+                                <h3 class="sc-title">BLUESTOCK ANALYTICS</h3>
+                                <p class="sc-sub">Financial stock market analytics & IPO tracker</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Button: [ VIEW ALL PROJECTS > ] -->
+                    <div class="reel-showcase-cta">
+                        <button class="reel-teal-btn" onclick="openProjectsModal()">
+                            <span>VIEW ALL PROJECTS</span>
+                            <i class="fa-solid fa-chevron-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Scene Location Tag -->
+                <div class="reel-scene-location-badge">
+                    <div class="location-badge-box">
+                        <span class="loc-bracket">[</span> MARINA BAYFRONT <span class="loc-bracket">]</span>
+                    </div>
+                </div>
+
+                <!-- Bottom Right Quote -->
+                <div class="reel-screen-quote">
+                    "Code is my weapon, Creativity is my world." <span>— Harsh</span>
+                </div>
+            </section>
+
+            <!-- ------------------------------------------ -->
+            <!-- SCREEN 4: EXPERIENCE JOURNEY               -->
+            <!-- (MATCHING USER SCREENSHOT TIMELINE)        -->
+            <!-- ------------------------------------------ -->
+            <section class="gta-screen" data-screen-index="4">
+                <div class="parallax-bg-layer" style="background-image: url('assets/char_mountain.jpg');"></div>
+                <div class="screen-gradient-overlay"></div>
+
+                <div class="reel-screen-4-layout">
+                    <div class="reel-experience-header">
+                        <h1 class="reel-experience-title">EXPERIENCE</h1>
+                        <span class="reel-experience-script">Journey</span>
+                    </div>
+
+                    <!-- Vertical Dotted Timeline with Glowing Circle Nodes -->
+                    <div class="reel-timeline-container">
+                        <div class="reel-timeline-line"></div>
+
+                        <!-- Node 1 -->
+                        <div class="reel-timeline-item">
+                            <div class="timeline-node"></div>
+                            <div class="timeline-content">
+                                <span class="timeline-period">2024 — 2025</span>
+                                <h3 class="timeline-role">Software Development Engineer Intern</h3>
+                                <h4 class="timeline-company">BlueStock.in</h4>
+                                <p class="timeline-desc">
+                                    Engineered and optimized core Java backend application modules to enhance system throughput and reliability. Collaborated across engineering squads on clean OOPs architecture.
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Node 2 -->
+                        <div class="reel-timeline-item">
+                            <div class="timeline-node"></div>
+                            <div class="timeline-content">
+                                <span class="timeline-period">2024</span>
+                                <h3 class="timeline-role">Data Analyst Intern</h3>
+                                <h4 class="timeline-company">BlueStock.in</h4>
+                                <p class="timeline-desc">
+                                    Executed complex SQL queries to query, clean, and analyze high-volume financial datasets. Leveraged Python Pandas for automated data cleaning and management reporting.
+                                </p>
+                            </div>
+                        </div>
+
+                        <!-- Node 3 -->
+                        <div class="reel-timeline-item">
+                            <div class="timeline-node"></div>
+                            <div class="timeline-content">
+                                <span class="timeline-period">2022 — PRESENT</span>
+                                <h3 class="timeline-role">B.Tech in Artificial Intelligence & Data Science</h3>
+                                <h4 class="timeline-company">Chameli Devi Group of Institutions, Indore</h4>
+                                <p class="timeline-desc">
+                                    3rd Year Undergraduate. Rigorous study in Object-Oriented Software Design, Data Structures & Algorithms, Database Engineering, and Machine Learning Systems.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Scene Location Tag -->
+                <div class="reel-scene-location-badge">
+                    <div class="location-badge-box">
+                        <span class="loc-bracket">[</span> ESCAMBIA HILLS <span class="loc-bracket">]</span>
+                    </div>
+                </div>
+
+                <!-- Bottom Right Quote -->
+                <div class="reel-screen-quote">
+                    "Code is my weapon, Creativity is my world." <span>— Harsh</span>
+                </div>
+            </section>
+
+            <!-- ------------------------------------------ -->
+            <!-- SCREEN 5: ACHIEVEMENTS UNLOCKED            -->
+            <!-- (MATCHING USER SCREENSHOT 4)               -->
+            <!-- ------------------------------------------ -->
+            <section class="gta-screen" data-screen-index="5">
+                <div class="parallax-bg-layer" style="background-image: url('assets/char_cars_night.jpg');"></div>
+                <div class="screen-gradient-overlay"></div>
+
+                <div class="reel-screen-showcase-layout">
+                    <div class="reel-screen-header">
+                        <h1 class="reel-screen-title">ACHIEVEMENTS</h1>
+                        <span class="reel-screen-script script-pink">Unlocked</span>
+                    </div>
+
+                    <!-- 4 Vertical Cards Stack (Matching Screenshot 4) -->
+                    <div class="reel-showcase-cards-stack">
+                        <div class="reel-showcase-card" onclick="openCertsModal()">
+                            <div class="sc-icon-box pink-box"><i class="fa-solid fa-star"></i></div>
+                            <div class="sc-meta">
+                                <h3 class="sc-title">FIRST PROJECT</h3>
+                                <p class="sc-sub">Shipped my first live production web build</p>
+                            </div>
+                        </div>
+
+                        <div class="reel-showcase-card" onclick="openCertsModal()">
+                            <div class="sc-icon-box cyan-box"><i class="fa-solid fa-plane"></i></div>
+                            <div class="sc-meta">
+                                <h3 class="sc-title">GLOBAL CLIENTS</h3>
+                                <p class="sc-sub">Engineered scalable Java APIs & database schemas</p>
+                            </div>
+                        </div>
+
+                        <div class="reel-showcase-card" onclick="openCertsModal()">
+                            <div class="sc-icon-box yellow-box"><i class="fa-solid fa-fire"></i></div>
+                            <div class="sc-meta">
+                                <h3 class="sc-title">GCP CLOUD CERTIFIED</h3>
+                                <p class="sc-sub">Google Cloud Arcade & compute milestones completed</p>
+                            </div>
+                        </div>
+
+                        <div class="reel-showcase-card" onclick="openCertsModal()">
+                            <div class="sc-icon-box teal-box"><i class="fa-solid fa-clock"></i></div>
+                            <div class="sc-meta">
+                                <h3 class="sc-title">DEDICATION</h3>
+                                <p class="sc-sub">1000+ hours of DSA & algorithmic consistency</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Button: [ VIEW CERTIFICATE > ] -->
+                    <div class="reel-showcase-cta">
+                        <button class="reel-pink-btn" onclick="openCertsModal()">
+                            <span>VIEW CERTIFICATE</span>
+                            <i class="fa-solid fa-chevron-right"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Watermark: MISSION PASSED Respect + -->
+                <div class="reel-watermark">
+                    <span class="wm-title">MISSION PASSED</span>
+                    <span class="wm-respect">Respect +</span>
+                    <span class="wm-reward-tag text-green">+$275,000</span>
+                </div>
+
+                <!-- Scene Location Tag -->
+                <div class="reel-scene-location-badge">
+                    <div class="location-badge-box">
+                        <span class="loc-bracket">[</span> DOWNTOWN | Vice City <span class="loc-bracket">]</span>
+                    </div>
+                </div>
+
+                <!-- Bottom Right Quote -->
+                <div class="reel-screen-quote">
+                    "Code is my weapon, Creativity is my world." <span>— Harsh</span>
+                </div>
+            </section>
+
+            <!-- ------------------------------------------ -->
+            <!-- SCREEN 6: ACADEMY (MATCHING SCREENSHOT 3)  -->
+            <!-- ------------------------------------------ -->
+            <section class="gta-screen" data-screen-index="6">
+                <div class="parallax-bg-layer" style="background-image: url('assets/bg_morning.jpg');"></div>
+                <div class="screen-gradient-overlay"></div>
+
+                <div class="reel-screen-academy-layout">
+                    <div class="reel-screen-header">
+                        <h1 class="reel-screen-title">HARSH'S CODING LAB</h1>
+                        <span class="reel-screen-script script-gold">Academy</span>
+                    </div>
+
+                    <p class="reel-screen-lead">
+                        My own coding lab — where I share knowledge, open-source repositories, technical resources and real-world software engineering skills to help developers become future ready.
+                    </p>
+
+                    <!-- 3 Horizontal Stat Counters -->
+                    <div class="reel-academy-stats-row">
+                        <div class="academy-stat-pill">
+                            <strong class="stat-num text-pink">120+</strong>
+                            <span class="stat-lbl">STUDENTS & PEERS</span>
+                        </div>
+                        <div class="academy-stat-pill">
+                            <strong class="stat-num text-yellow">25+</strong>
+                            <span class="stat-lbl">COURSES & MODULES</span>
+                        </div>
+                        <div class="academy-stat-pill">
+                            <strong class="stat-num text-cyan">50+</strong>
+                            <span class="stat-lbl">REPOS & VIDEOS</span>
+                        </div>
+                    </div>
+
+                    <!-- Button: [ VISIT ACADEMY > ] -->
+                    <div class="reel-academy-cta">
+                        <a href="https://github.com/harshgawde12112005-boop" target="_blank" class="reel-orange-btn" onclick="triggerMissionToast('ACADEMY VAULT OPENED!', 200000, 'GitHub Lab Unlocked')">
+                            <span>VISIT ACADEMY</span>
+                            <i class="fa-solid fa-chevron-right"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Watermark: MISSION PASSED Respect + -->
+                <div class="reel-watermark">
+                    <span class="wm-title">MISSION PASSED</span>
+                    <span class="wm-respect">Respect +</span>
+                    <span class="wm-reward-tag text-green">+$200,000</span>
+                </div>
+
+                <!-- Scene Location Tag -->
+                <div class="reel-scene-location-badge">
+                    <div class="location-badge-box">
+                        <span class="loc-bracket">[</span> KELBRAY HEIGHTS <span class="loc-bracket">]</span>
+                    </div>
+                </div>
+
+                <!-- Bottom Right Quote -->
+                <div class="reel-screen-quote">
+                    "Code is my weapon, Creativity is my world." <span>— Harsh</span>
+                </div>
+            </section>
+
+            <!-- ------------------------------------------ -->
+            <!-- SCREEN 7: CONTACT LET'S CONNECT            -->
+            <!-- (MATCHING USER SCREENSHOT 5)               -->
+            <!-- ------------------------------------------ -->
+            <section class="gta-screen" data-screen-index="7">
+                <div class="parallax-bg-layer" style="background-image: url('assets/char_cars_night.jpg');"></div>
+                <div class="screen-gradient-overlay"></div>
+
+                <div class="reel-screen-showcase-layout">
+                    <div class="reel-screen-header">
+                        <h1 class="reel-screen-title">CONTACT</h1>
+                        <span class="reel-screen-script script-blue">Let's Connect</span>
+                    </div>
+
+                    <!-- 4 Vertical Cards Stack (Matching Screenshot 5) -->
+                    <div class="reel-showcase-cards-stack">
+                        <a href="mailto:harsh.gawde12112005@gmail.com" class="reel-showcase-card">
+                            <div class="sc-icon-box blue-box"><i class="fa-solid fa-envelope"></i></div>
+                            <div class="sc-meta">
+                                <span class="sc-tag-lbl">EMAIL</span>
+                                <h3 class="sc-title">harsh.gawde12112005@gmail.com</h3>
+                            </div>
+                        </a>
+
+                        <div class="reel-showcase-card">
+                            <div class="sc-icon-box cyan-box"><i class="fa-solid fa-location-dot"></i></div>
+                            <div class="sc-meta">
+                                <span class="sc-tag-lbl">LOCATION</span>
+                                <h3 class="sc-title">Indore, Madhya Pradesh, India</h3>
+                            </div>
+                        </div>
+
+                        <a href="https://www.linkedin.com/in/harsh-gawde-3aa666336" target="_blank" class="reel-showcase-card">
+                            <div class="sc-icon-box blue-box"><i class="fa-brands fa-linkedin"></i></div>
+                            <div class="sc-meta">
+                                <span class="sc-tag-lbl">LINKEDIN</span>
+                                <h3 class="sc-title">/in/harsh-gawde</h3>
+                            </div>
+                        </a>
+
+                        <a href="https://github.com/harshgawde12112005-boop" target="_blank" class="reel-showcase-card">
+                            <div class="sc-icon-box purple-box"><i class="fa-brands fa-github"></i></div>
+                            <div class="sc-meta">
+                                <span class="sc-tag-lbl">GITHUB</span>
+                                <h3 class="sc-title">@harshgawde</h3>
+                            </div>
+                        </a>
+                    </div>
+
+                    <!-- Button: [ SEND MESSAGE > ] -->
+                    <div class="reel-showcase-cta">
+                        <a href="mailto:harsh.gawde12112005@gmail.com?subject=Opportunity%20Discussion%20with%20Harsh" class="reel-blue-btn" onclick="triggerMissionToast('TRANSMISSION SENT!', 100000, 'Direct Uplink Established')">
+                            <span>SEND MESSAGE</span>
+                            <i class="fa-solid fa-chevron-right"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Scene Location Tag -->
+                <div class="reel-scene-location-badge">
+                    <div class="location-badge-box">
+                        <span class="loc-bracket">[</span> THE KEYS | South Leonida <span class="loc-bracket">]</span>
+                    </div>
+                </div>
+
+                <!-- Bottom Right Quote -->
+                <div class="reel-screen-quote">
+                    "Code is my weapon, Creativity is my world." <span>— Harsh</span>
+                </div>
+            </section>
+
+            <!-- ------------------------------------------ -->
+            <!-- SCREEN 8: MISSION COMPLETE (SEE YOU SOON!) -->
+            <!-- ------------------------------------------ -->
+            <section class="gta-screen" data-screen-index="8">
+                <div class="parallax-bg-layer" style="background-image: url('assets/bg_sunset.jpg');"></div>
+                <div class="screen-gradient-overlay"></div>
+
+                <div class="reel-screen-6-layout">
+                    <div class="reel-complete-header">
+                        <span class="reel-complete-pre">THANK YOU FOR VISITING</span>
+                        <h1 class="reel-complete-title">MISSION<br>COMPLETE</h1>
+                        <span class="reel-complete-script">See you soon!</span>
+                    </div>
+
+                    <!-- Button: [ △ BACK TO HOME > ] -->
+                    <div class="reel-complete-cta">
+                        <button class="reel-pink-home-btn" onclick="jumpToScreen(0)">
+                            <i class="fa-solid fa-play reel-triangle-icon"></i>
+                            <span>BACK TO HOME</span>
+                            <i class="fa-solid fa-chevron-right"></i>
+                        </button>
+                    </div>
+
+                    <!-- Contact Channels Row -->
+                    <div class="reel-contact-links-row">
+                        <a href="mailto:harsh.gawde12112005@gmail.com" class="reel-contact-chip">
+                            <i class="fa-solid fa-envelope text-cyan"></i>
+                            <span>harsh.gawde12112005@gmail.com</span>
+                        </a>
+                        <a href="tel:+919755014909" class="reel-contact-chip">
+                            <i class="fa-solid fa-phone text-green"></i>
+                            <span>+91 97550-14909</span>
+                        </a>
+                        <a href="https://www.linkedin.com/in/harsh-gawde-3aa666336" target="_blank" class="reel-contact-chip">
+                            <i class="fa-brands fa-linkedin text-blue"></i>
+                            <span>LinkedIn Profile</span>
+                        </a>
+                        <a href="https://github.com/harshgawde12112005-boop" target="_blank" class="reel-contact-chip">
+                            <i class="fa-brands fa-github text-white"></i>
+                            <span>GitHub Vault</span>
+                        </a>
+                        <a href="assets/harsh-gawde-resume.pdf" download="Harsh_Gawde_Resume.pdf" class="reel-contact-chip resume-chip" onclick="triggerMissionToast('RESUME SECURED!', 50000, 'ATS Resume Acquired')">
+                            <i class="fa-solid fa-file-pdf text-yellow"></i>
+                            <span>DOWNLOAD RESUME (PDF)</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Causeway location tag near walking character -->
+                <div class="reel-causeway-tag">
+                    <span>GRASSRIVERS CAUSEWAY</span>
+                </div>
+
+                <!-- Bottom Right Quote -->
+                <div class="reel-screen-quote">
+                    "Code is my weapon, Creativity is my world." <span>— Harsh</span>
+                </div>
+            </section>
+
+        </div>
+    </div>
+
+    <!-- GSAP CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

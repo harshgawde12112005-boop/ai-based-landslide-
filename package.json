@@ -1,8 +1,8 @@
 {
-	"name": "landguard-ai",
+	"name": "landslide-guard-ai",
 	"version": "2.0.0",
 	"private": true,
-	"description": "LandGuard AI - Geotechnical Landslide Risk Intelligence Platform",
+	"description": "Landslide Guard AI - Geotechnical Landslide Risk Intelligence Platform",
 	"scripts": {
 		"dev": "npm --prefix frontend run dev --",
 		"start": "npm --prefix frontend run dev --",

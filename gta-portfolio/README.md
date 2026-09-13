@@ -1,0 +1,65 @@
+# 🌴 Harsh Gawde — GTA VI / Vice City Themed Portfolio
+
+> **"Level 99 Java Developer & AI Operative"**  
+> Inspired by the viral GTA 6 developer portfolio reel (`@sanjai.builds` on Instagram).
+
+![Harsh Gawde GTA Portfolio](assets/profile.png)
+
+---
+
+## ⚡ Features & Signature Rockstar Mechanics
+
+### 1. 🌟 Rockstar Heads-Up Display (HUD)
+- **Live In-Game Clock**: Displays current day and real-time clock (`23:42`) with flashing colon.
+- **Wanted Level 5-Star System**: Starts at 1 star and escalates as recruiters explore the chapters. Reaching 5 stars triggers a flashing police siren alert!
+- **Dynamic Cash Counter**: Big GTA bold green cash HUD (`$1,250,000+`) that ticks up dynamically with register sound (`cha-ching`) upon inspecting projects and downloading credentials.
+- **Health & Armor Bars**: Tactical battery reflecting Core Java (98%) and AI/Data Science (92%).
+- **Active Weapon Slot**: Shows equipped tech weapon (`JAVA JDK 21 [∞]`).
+
+### 2. 🎯 GPS Minimap / Radar HUD (Bottom-Left)
+- Rotating radar sweep with directional player arrow that tracks scrolling velocity.
+- Waypoint blips (`[A]` Bio Dossier, `[W]` Arsenal, `[M]` Heists, `[S]` Syndicates, `[D]` Vault, `[U]` Uplink) that highlight dynamically and allow smooth teleportation.
+- Real-time district street locator (`OCEAN DRIVE // INDORE SECTOR`).
+
+### 3. 🏆 "MISSION PASSED!" Toast & Web Audio Engine
+- Authentic GTA banner with yellow/black styling, `RESPECT +50`, and cash rewards.
+- **Built-in Web Audio API Synthesizer**: Produces nostalgic fanfare tunes, coin ticks, button clicks, and police sirens directly via code. **Zero external MP3 dependencies** — 100% reliable across all browsers!
+- Quick audio mute/unmute toggle in the HUD (`M` key or click `FX: ON`).
+
+### 4. 📱 iFruit Smartphone (Bottom-Right)
+- Slide-up modern smartphone (`P` key or click the dock icon).
+- **Contacts App**: Harsh's direct phone (`+91 97550-14909`), email, LinkedIn, and GitHub.
+- **Cheats Menu**: Tap to run cheats anytime.
+- **Vice City Radio**: Functional radio player with synthetic 80s synthwave arpeggios.
+- **Recruiter Dispatch**: Fast message shortcut.
+
+### 5. 🌆 4 Atmospheric Day-Night Cycles (From the Reel)
+- **Sunset Strip (Vice City)**: Signature neon magenta, orange sunset sky, palm tree shadows.
+- **Deep Night Neon**: Cyberpunk dark city skyline with cyan and pink street lights.
+- **Storm Afternoon**: Dark clouds, animated rain streaks, and random lightning flashes.
+- **Morning Boardwalk**: Golden pastel sunrise and coastal ocean vibes.
+
+### 6. 🎮 Vice City Secret Cheat Codes
+Type these anywhere on your keyboard:
+- `HEESOYAM` ➔ Refill Health & Armor + **+$250,000 Cash**!
+- `LEAVEMEALONE` ➔ Clear Wanted Level to 0 stars!
+- `BRINGITON` ➔ 5-Star Police Chase with flashing siren!
+- `DAYCYCLE` ➔ Shift atmospheric skies between Sunset, Night, Storm, and Morning!
+- `ROCKSTAR` ➔ Unlock Rockstar VIP status and **+$500,000 Cash**!
+
+---
+
+## 🚀 How to Run
+
+### Option 1: Zero-Install Instant Run (No Node.js Required)
+Simply open `index.html` in any browser (Chrome, Edge, Firefox, Safari) by double-clicking it.
+
+### Option 2: Run with Vite Dev Server
+```bash
+npm install
+npm run dev
+```
+
+### Option 3: Deploy to Vercel / Netlify / GitHub Pages
+- **Vercel**: Import this folder and hit Deploy (Framework preset: `Vite` or `Other`).
+- **GitHub Pages**: Push this repository and select GitHub Pages from the repository settings.

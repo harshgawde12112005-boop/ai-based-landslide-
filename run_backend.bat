@@ -1,8 +1,8 @@
 @echo off
-title LandGuard AI - Backend Server
+title Landslide Guard AI - Backend Server
 cd /d "%~dp0"
 echo ========================================================
-echo   Starting LandGuard AI FastAPI Backend Server
+echo   Starting Landslide Guard AI FastAPI Backend Server
 echo ========================================================
 echo API URL:  http://localhost:8000
 echo API Docs: http://localhost:8000/docs

@@ -1,11 +1,11 @@
-# 🛡️ LandGuard AI - Geotechnical Landslide Risk Intelligence Platform
+# 🛡️ Landslide Guard AI - Geotechnical Landslide Risk Intelligence Platform
 
 [![FastAPI](https://img.shields.io/badge/FastAPI-0.100+-009688.svg?logo=fastapi&logoColor=white)](https://fastapi.tiangolo.com)
 [![React](https://img.shields.io/badge/React-19.0+-61DAFB.svg?logo=react&logoColor=black)](https://react.dev)
 [![Vite](https://img.shields.io/badge/Vite-8.0+-646CFF.svg?logo=vite&logoColor=white)](https://vitejs.dev)
 [![Leaflet](https://img.shields.io/badge/Leaflet-1.9+-199900.svg?logo=leaflet&logoColor=white)](https://leafletjs.com)
 
-**LandGuard AI** is a comprehensive full-stack geological disaster monitoring and early warning platform designed to predict, monitor, and mitigate landslide hazards across vulnerable terrain sectors (e.g. Himalayas, Western Ghats).
+**Landslide Guard AI** is a comprehensive full-stack geological disaster monitoring and early warning platform designed to predict, monitor, and mitigate landslide hazards across vulnerable terrain sectors (e.g. Himalayas, Western Ghats).
 
 ---
 

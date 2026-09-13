@@ -1,5 +1,5 @@
 /* ==========================================================================
-   LANDGUARD AI - MULTI-THEME DESIGN SYSTEM
+  LANDSLIDE GUARD AI - MULTI-THEME DESIGN SYSTEM
    ========================================================================== */
 
 /* 1. Geological Sci-Fi Dark Theme (Default) */
@@ -1143,7 +1143,7 @@ input[type='range'] {
   .toast-notice { right: 16px; bottom: 16px; }
 }
 
-/* SlopeWatch finish: compact, legible, and intentionally low-gloss. */
+/* Landslide Guard AI finish: compact, legible, and intentionally low-gloss. */
 :root, [data-theme='dark'] {
   --bg-main: #171a18;
   --bg-gradient: linear-gradient(135deg, #171a18 0%, #202621 52%, #161916 100%);
@@ -1544,7 +1544,7 @@ input[type='range'] {
 }
 
 /* --------------------------------------------------------------------------
-   SlopeWatch editorial control room
+  Landslide Guard AI editorial control room
    -------------------------------------------------------------------------- */
 :root, [data-theme='dark'], [data-theme='light'] {
   --ink: #102522;

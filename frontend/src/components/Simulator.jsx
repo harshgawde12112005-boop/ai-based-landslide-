@@ -71,7 +71,7 @@ export default function Simulator({
     });
 
     const reportData = {
-      title: 'SlopeWatch - Geotechnical Hazard Assessment Report',
+      title: 'Landslide Guard AI - Geotechnical Hazard Assessment Report',
       timestamp: new Date().toISOString(),
       zone: selectedZone?.name || 'Custom Evaluated Slope',
       state: selectedZone?.state || 'Regional',
@@ -96,7 +96,7 @@ export default function Simulator({
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `SlopeWatch_Advisory_${selectedZone?.name?.replace(/\s+/g, '_') || 'Assessment'}_${Date.now()}.json`;
+    a.download = `Landslide_Guard_AI_Advisory_${selectedZone?.name?.replace(/\s+/g, '_') || 'Assessment'}_${Date.now()}.json`;
     a.click();
     URL.revokeObjectURL(url);
   };

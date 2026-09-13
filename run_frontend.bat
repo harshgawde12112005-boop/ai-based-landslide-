@@ -1,8 +1,8 @@
 @echo off
-title LandGuard AI - React Dashboard
+title Landslide Guard AI - React Dashboard
 cd /d "%~dp0frontend"
 echo ========================================================
-echo   Starting LandGuard AI Frontend Dashboard
+echo   Starting Landslide Guard AI Frontend Dashboard
 echo ========================================================
 echo Dashboard URL: http://localhost:5173
 echo.

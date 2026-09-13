@@ -204,7 +204,7 @@ export default function App() {
           </div>
           <div>
             <div className="brand-name">
-              SlopeWatch <span className="ai-tag">FIELD OPS</span>
+              Landslide Guard AI <span className="ai-tag">FIELD OPS</span>
             </div>
             <div className="brand-subtitle">Geotechnical Resilience</div>
           </div>
@@ -579,7 +579,7 @@ function HistoryPage({ riskData }) {
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `LandGuard_Telemetry_Log_${Date.now()}.csv`;
+    a.download = `Landslide_Guard_AI_Telemetry_Log_${Date.now()}.csv`;
     a.click();
     URL.revokeObjectURL(url);
   };

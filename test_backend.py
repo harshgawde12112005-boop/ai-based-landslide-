@@ -4,7 +4,7 @@ from fastapi.testclient import TestClient
 from main import app
 from ml_engine import calculate_landslide_risk
 
-class TestLandGuardAI(unittest.TestCase):
+class TestLandslideGuardAI(unittest.TestCase):
     def setUp(self):
         self.client = TestClient(app)
 
