@@ -22,7 +22,7 @@
     <!-- Font Awesome 6 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     
-    <link rel="stylesheet" href="style.css?v=2.5">
+    <link rel="stylesheet" href="style.css?v=2.6">
 </head>
 <body>
 
@@ -120,7 +120,7 @@
         </div>
 
         <!-- ESC — BACK TO MENU Button -->
-        <button class="reel-esc-btn hidden" id="reelEscBtn" onclick="jumpToScreen(0)">
+        <button class="reel-esc-btn hidden" id="reelEscBtn" onclick="window.jumpToScreen(0, true)">
             <i class="fa-solid fa-arrow-left"></i> ESC — BACK TO MENU
         </button>
     </div>
@@ -193,7 +193,7 @@
     <div class="reel-hud-footer">
         <div class="reel-footer-tagline">Vice City Inspired — Build Different — Stay Legendary</div>
         <div class="reel-controls-bar">
-            <button class="nav-arrow-btn" onclick="jumpToScreen(currentScreen - 1, true)" title="Previous Screen">◀ PREV</button>
+            <button class="nav-arrow-btn prev" id="navPrevBtn" onclick="navPrevScreen()" title="Previous Screen">◀ PREV</button>
             <span class="sep">|</span>
             <span><kbd>ENTER</kbd> SELECT</span>
             <span class="sep">|</span>
@@ -205,9 +205,9 @@
             <span class="sep">|</span>
             <span><kbd>W</kbd> WANTED</span>
             <span class="sep">|</span>
-            <span><kbd>M</kbd> MUTE</span>
+            <button class="nav-arrow-btn mute-hud-btn" onclick="toggleMusicMute()" title="Mute/Unmute Radio"><kbd>M</kbd> MUTE</button>
             <span class="sep">|</span>
-            <button class="nav-arrow-btn" onclick="jumpToScreen(currentScreen + 1, true)" title="Next Screen">NEXT ▶</button>
+            <button class="nav-arrow-btn next" id="navNextBtn" onclick="navNextScreen()" title="Next Screen">NEXT ▶</button>
         </div>
     </div>
 
@@ -637,47 +637,47 @@
                         </div>
 
                         <nav class="reel-vertical-menu" id="reelVerticalMenu">
-                            <button class="reel-menu-link active" data-target="start_game" id="startGameMenuBtn">
+                            <button class="reel-menu-link active" data-target="start_game" id="startGameMenuBtn" onclick="openWeaponWheel(true)">
                                 <span class="menu-check-icon" id="chk-start"></span>
                                 <span class="link-cursor">›</span>
                                 <span class="link-title">START GAME</span>
                             </button>
-                            <button class="reel-menu-link" data-target="1">
+                            <button class="reel-menu-link" data-target="1" onclick="window.jumpToScreen(1, true)">
                                 <span class="menu-check-icon" id="chk-about"></span>
                                 <span class="link-cursor">›</span>
                                 <span class="link-title">ABOUT ME</span>
                             </button>
-                            <button class="reel-menu-link" data-target="2">
+                            <button class="reel-menu-link" data-target="2" onclick="window.jumpToScreen(2, true)">
                                 <span class="menu-check-icon" id="chk-skills"></span>
                                 <span class="link-cursor">›</span>
                                 <span class="link-title">SKILLS</span>
                             </button>
-                            <button class="reel-menu-link" data-target="3">
+                            <button class="reel-menu-link" data-target="3" onclick="window.jumpToScreen(3, true)">
                                 <span class="menu-check-icon" id="chk-projects"></span>
                                 <span class="link-cursor">›</span>
                                 <span class="link-title">PROJECTS</span>
                             </button>
-                            <button class="reel-menu-link" data-target="4">
+                            <button class="reel-menu-link" data-target="4" onclick="window.jumpToScreen(4, true)">
                                 <span class="menu-check-icon" id="chk-experience"></span>
                                 <span class="link-cursor">›</span>
                                 <span class="link-title">EXPERIENCE</span>
                             </button>
-                            <button class="reel-menu-link" data-target="5">
+                            <button class="reel-menu-link" data-target="5" onclick="window.jumpToScreen(5, true)">
                                 <span class="menu-check-icon" id="chk-achievements"></span>
                                 <span class="link-cursor">›</span>
                                 <span class="link-title">ACHIEVEMENTS</span>
                             </button>
-                            <button class="reel-menu-link" data-target="6">
+                            <button class="reel-menu-link" data-target="6" onclick="window.jumpToScreen(6, true)">
                                 <span class="menu-check-icon" id="chk-academy"></span>
                                 <span class="link-cursor">›</span>
                                 <span class="link-title">ACADEMY</span>
                             </button>
-                            <button class="reel-menu-link" data-target="7">
+                            <button class="reel-menu-link" data-target="7" onclick="window.jumpToScreen(7, true)">
                                 <span class="menu-check-icon" id="chk-contact"></span>
                                 <span class="link-cursor">›</span>
                                 <span class="link-title">CONTACT</span>
                             </button>
-                            <button class="reel-menu-link exit-link" id="reelExitLink" onclick="jumpToScreen(8)">
+                            <button class="reel-menu-link exit-link" id="reelExitLink" onclick="window.jumpToScreen(8, true)">
                                 <span class="menu-check-icon"></span>
                                 <span class="link-cursor">›</span>
                                 <span class="link-title">EXIT GAME</span>
@@ -1265,6 +1265,6 @@
 
     <!-- GSAP CDN -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-    <script src="script.js?v=2.5"></script>
+    <script src="script.js?v=2.6"></script>
 </body>
 </html>

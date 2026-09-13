@@ -2197,7 +2197,13 @@ button { border: none; background: none; cursor: pointer; font-family: inherit; 
 }
 
 @media (max-width: 768px) {
-    .reel-hud-top-center { display: none; }
+    .reel-hud-top-center {
+        display: flex !important;
+        transform: translateX(-50%) scale(0.85);
+        top: 6px;
+        z-index: 300;
+    }
+    .reel-countdown-wrap { display: none !important; }
     .reel-loadout-widget { display: none; }
     .reel-name-heading { font-size: 2.8rem; }
     .reel-about-title, .reel-experience-title, .reel-complete-title { font-size: 3rem; }
@@ -2215,7 +2221,20 @@ button { border: none; background: none; cursor: pointer; font-family: inherit; 
     .radial-slice-slot span { font-size: 0.62rem !important; }
     .radial-stats-panel { max-width: 92vw !important; padding: 12px !important; width: 100% !important; }
     .full-map-window { width: 96vw !important; height: 90vh !important; }
-    .reel-controls-bar { font-size: 0.58rem; padding: 2px 8px; gap: 4px; }
+    .reel-controls-bar {
+        font-size: 0.72rem;
+        padding: 4px 10px;
+        gap: 8px;
+        max-width: 95vw;
+        justify-content: center;
+    }
+    .reel-controls-bar > span {
+        display: none !important;
+    }
+    .nav-arrow-btn {
+        padding: 5px 16px !important;
+        font-size: 0.88rem !important;
+    }
 }
 
 /* ================================================== */

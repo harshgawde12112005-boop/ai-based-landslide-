@@ -17,6 +17,20 @@ let isWeaponWheelOpen = false;
 let isFullMapOpen = false;
 let selectedMapIndex = 1;
 
+// Expose state and robust nav helpers globally
+window.currentScreen = currentScreen;
+window.totalScreens = totalScreens;
+window.navNextScreen = function() {
+    if (currentScreen < totalScreens - 1) {
+        window.jumpToScreen(currentScreen + 1, true);
+    }
+};
+window.navPrevScreen = function() {
+    if (currentScreen > 0) {
+        window.jumpToScreen(currentScreen - 1, true);
+    }
+};
+
 // Full Map District Intel Data
 const MAP_DISTRICTS = {
     0: {
@@ -712,37 +726,57 @@ window.jumpToScreen = function(targetIndex, force = false) {
     if (isRolling && !force) {
         return;
     }
-    isRolling = true;
-    radio.playRollWhoosh();
-
-    // Auto-reset rolling lock after 480ms
-    if (window._rollingTimer) clearTimeout(window._rollingTimer);
-    window._rollingTimer = setTimeout(() => { isRolling = false; }, 480);
 
     const screens = document.querySelectorAll(".gta-screen");
-    const currentEl = screens[currentScreen];
+    if (!screens || screens.length === 0) return;
+
+    const prevIndex = currentScreen;
+    // Synchronize currentScreen immediately so no subsequent click uses stale screen index
+    currentScreen = targetIndex;
+    window.currentScreen = targetIndex;
+    isRolling = true;
+
+    radio.playRollWhoosh();
+
+    // Auto-reset rolling lock after 450ms safety buffer
+    if (window._rollingTimer) clearTimeout(window._rollingTimer);
+    window._rollingTimer = setTimeout(() => { isRolling = false; }, 450);
+
+    const currentEl = screens[prevIndex];
     const targetEl = screens[targetIndex];
     const flashOverlay = document.getElementById("rollFlashOverlay");
 
     // Camera roll direction
-    const direction = targetIndex > currentScreen ? 1 : -1;
+    const direction = targetIndex > prevIndex ? 1 : -1;
 
     // Glitch flash
     if (flashOverlay) {
         flashOverlay.classList.add("active");
-        setTimeout(() => flashOverlay.classList.remove("active"), 250);
+        setTimeout(() => flashOverlay.classList.remove("active"), 220);
     }
 
+    // Clean up any other screens immediately so no rogue screen stays active
+    screens.forEach((s, idx) => {
+        if (idx !== prevIndex && idx !== targetIndex) {
+            s.classList.remove("active");
+            if (typeof gsap !== "undefined" && gsap.killTweensOf) {
+                gsap.killTweensOf(s);
+                gsap.set(s, { clearProps: "all" });
+            }
+        }
+    });
+
     if (typeof gsap !== "undefined" && gsap.to && gsap.fromTo) {
-        gsap.killTweensOf([currentEl, targetEl]);
+        gsap.killTweensOf(currentEl);
+        gsap.killTweensOf(targetEl);
         targetEl.classList.add("active");
 
         // 3D Roll Out
         gsap.to(currentEl, {
-            duration: 0.42,
-            rotationY: -direction * 18,
-            rotationX: 6,
-            z: -220,
+            duration: 0.38,
+            rotationY: -direction * 16,
+            rotationX: 4,
+            z: -180,
             opacity: 0,
             ease: "power2.inOut",
             onComplete: () => {
@@ -753,21 +787,26 @@ window.jumpToScreen = function(targetIndex, force = false) {
 
         // 3D Roll In
         gsap.fromTo(targetEl, {
-            rotationY: direction * 18,
-            rotationX: -6,
-            z: -220,
+            rotationY: direction * 16,
+            rotationX: -4,
+            z: -180,
             opacity: 0
         }, {
-            duration: 0.46,
+            duration: 0.40,
             rotationY: 0,
             rotationX: 0,
             z: 0,
             opacity: 1,
             ease: "power2.out",
             onComplete: () => {
-                currentScreen = targetIndex;
                 isRolling = false;
-                gsap.set(targetEl, { clearProps: "transform" });
+                screens.forEach((s, idx) => {
+                    if (idx !== targetIndex) {
+                        s.classList.remove("active");
+                        gsap.set(s, { clearProps: "all" });
+                    }
+                });
+                gsap.set(targetEl, { clearProps: "all" });
                 onScreenArrived(targetIndex);
             }
         });
@@ -775,8 +814,10 @@ window.jumpToScreen = function(targetIndex, force = false) {
         // Pure CSS Fail-Safe Fallback
         currentEl.classList.remove("active");
         targetEl.classList.add("active");
-        currentScreen = targetIndex;
         isRolling = false;
+        screens.forEach((s, idx) => {
+            if (idx !== targetIndex) s.classList.remove("active");
+        });
         onScreenArrived(targetIndex);
     }
 };
@@ -1009,10 +1050,12 @@ window.equipAndLaunchGame = function() {
     const chkStart = document.getElementById("chk-start");
     if (chkStart) chkStart.textContent = "✓";
 
-    // Roll into Screen 1 (About Me)
-    setTimeout(() => {
-        jumpToScreen(1);
-    }, 400);
+    // Roll into Screen 1 (About Me) ONLY if starting from main menu (screen 0)
+    if (currentScreen === 0) {
+        setTimeout(() => {
+            window.jumpToScreen(1, true);
+        }, 300);
+    }
 };
 
 window.equipCurrentHighlightedWeapon = function() {
@@ -1212,7 +1255,7 @@ window.fastTravelToScreen = function(screenIdx) {
     if (screenIdx < 0 || screenIdx >= totalScreens) return;
     radio.playTeleportSound();
     closeFullMap();
-    jumpToScreen(screenIdx);
+    window.jumpToScreen(screenIdx, true);
     triggerMissionToast("GPS WARP COMPLETE!", 50000, `Fast-Traveled to ${MAP_DISTRICTS[screenIdx]?.title || 'Destination'}`);
 };
 
@@ -1334,7 +1377,7 @@ function setupGlobalControls() {
             closeProjectsModal();
             closeCertsModal();
             if (currentScreen !== 0) {
-                jumpToScreen(0);
+                window.jumpToScreen(0, true);
             }
             return;
         }
@@ -1350,11 +1393,11 @@ function setupGlobalControls() {
                 if (activeLink) {
                     const targetAttr = activeLink.getAttribute("data-target");
                     if (targetAttr === "start_game" || activeLink.id === "startGameMenuBtn") {
-                        openWeaponWheel();
+                        openWeaponWheel(true);
                         return;
                     }
                     const target = parseInt(targetAttr);
-                    if (!isNaN(target)) jumpToScreen(target);
+                    if (!isNaN(target)) window.jumpToScreen(target, true);
                 }
             }
             return;
@@ -1363,18 +1406,14 @@ function setupGlobalControls() {
         // Space / Arrow Right: Next Screen
         if (e.key === " " || e.key === "ArrowRight") {
             e.preventDefault();
-            if (currentScreen < totalScreens - 1) {
-                jumpToScreen(currentScreen + 1);
-            }
+            window.navNextScreen();
             return;
         }
 
         // Arrow Left: Prev Screen
         if (e.key === "ArrowLeft") {
             e.preventDefault();
-            if (currentScreen > 0) {
-                jumpToScreen(currentScreen - 1);
-            }
+            window.navPrevScreen();
             return;
         }
 
@@ -1404,12 +1443,12 @@ function setupGlobalControls() {
         if (wheelTimer) clearTimeout(wheelTimer);
         wheelTimer = setTimeout(() => { scrollDelta = 0; }, 180);
 
-        if (scrollDelta > 35) {
+        if (scrollDelta > 30) {
             scrollDelta = 0;
-            if (currentScreen < totalScreens - 1) jumpToScreen(currentScreen + 1);
-        } else if (scrollDelta < -35) {
+            window.navNextScreen();
+        } else if (scrollDelta < -30) {
             scrollDelta = 0;
-            if (currentScreen > 0) jumpToScreen(currentScreen - 1);
+            window.navPrevScreen();
         }
     }, { passive: true });
 
@@ -1431,11 +1470,11 @@ function setupGlobalControls() {
         const diffY = touchStartY - touchEndY;
         const diffX = touchStartX - touchEndX;
 
-        if (Math.abs(diffY) > Math.abs(diffX) && Math.abs(diffY) > 30) {
-            if (diffY > 30) {
-                if (currentScreen < totalScreens - 1) jumpToScreen(currentScreen + 1);
-            } else if (diffY < -30) {
-                if (currentScreen > 0) jumpToScreen(currentScreen - 1);
+        if (Math.abs(diffY) > Math.abs(diffX) && Math.abs(diffY) > 25) {
+            if (diffY > 25) {
+                window.navNextScreen();
+            } else if (diffY < -25) {
+                window.navPrevScreen();
             }
         }
     }, { passive: true });
