@@ -851,7 +851,7 @@ function setupMainMenu() {
             radio.playSelectSound();
             const targetAttr = link.getAttribute("data-target");
             if (targetAttr === "start_game" || link.id === "startGameMenuBtn") {
-                openWeaponWheel();
+                openWeaponWheel(true);
                 return;
             }
             const target = parseInt(targetAttr);
@@ -866,12 +866,21 @@ function setupMainMenu() {
 // ========================================================
 // 4. RADIAL WEAPON WHEEL & MODALS
 // ========================================================
-window.openWeaponWheel = function() {
+window.openWeaponWheel = function(autoLaunch = false) {
     const overlay = document.getElementById("weaponWheelOverlay");
     if (!overlay) return;
     overlay.classList.add("active");
     isWeaponWheelOpen = true;
     radio.playSelectSound();
+
+    if (autoLaunch) {
+        if (window._autoLaunchTimer) clearTimeout(window._autoLaunchTimer);
+        window._autoLaunchTimer = setTimeout(() => {
+            if (isWeaponWheelOpen) {
+                equipAndLaunchGame();
+            }
+        }, 1500);
+    }
 };
 
 window.closeWeaponWheel = function() {
