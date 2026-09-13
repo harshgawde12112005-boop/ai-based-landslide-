@@ -705,15 +705,19 @@ document.addEventListener("click", () => {
 // ========================================================
 // 2. SCREEN NAVIGATION & 3D CAMERA ROLL
 // ========================================================
-window.jumpToScreen = function(targetIndex) {
-    if (targetIndex < 0 || targetIndex >= totalScreens || targetIndex === currentScreen || isRolling) {
+window.jumpToScreen = function(targetIndex, force = false) {
+    if (targetIndex < 0 || targetIndex >= totalScreens || targetIndex === currentScreen) {
+        return;
+    }
+    if (isRolling && !force) {
         return;
     }
     isRolling = true;
     radio.playRollWhoosh();
 
-    // Auto-reset rolling lock after 800ms as a safety guard
-    setTimeout(() => { isRolling = false; }, 800);
+    // Auto-reset rolling lock after 480ms
+    if (window._rollingTimer) clearTimeout(window._rollingTimer);
+    window._rollingTimer = setTimeout(() => { isRolling = false; }, 480);
 
     const screens = document.querySelectorAll(".gta-screen");
     const currentEl = screens[currentScreen];
@@ -726,16 +730,19 @@ window.jumpToScreen = function(targetIndex) {
     // Glitch flash
     if (flashOverlay) {
         flashOverlay.classList.add("active");
-        setTimeout(() => flashOverlay.classList.remove("active"), 350);
+        setTimeout(() => flashOverlay.classList.remove("active"), 250);
     }
 
     if (typeof gsap !== "undefined" && gsap.to && gsap.fromTo) {
+        gsap.killTweensOf([currentEl, targetEl]);
+        targetEl.classList.add("active");
+
         // 3D Roll Out
         gsap.to(currentEl, {
-            duration: 0.55,
-            rotationY: -direction * 22,
-            rotationX: 12,
-            z: -300,
+            duration: 0.42,
+            rotationY: -direction * 18,
+            rotationX: 6,
+            z: -220,
             opacity: 0,
             ease: "power2.inOut",
             onComplete: () => {
@@ -745,22 +752,22 @@ window.jumpToScreen = function(targetIndex) {
         });
 
         // 3D Roll In
-        targetEl.classList.add("active");
         gsap.fromTo(targetEl, {
-            rotationY: direction * 22,
-            rotationX: -12,
-            z: -300,
+            rotationY: direction * 18,
+            rotationX: -6,
+            z: -220,
             opacity: 0
         }, {
-            duration: 0.65,
+            duration: 0.46,
             rotationY: 0,
             rotationX: 0,
             z: 0,
             opacity: 1,
-            ease: "power3.out",
+            ease: "power2.out",
             onComplete: () => {
                 currentScreen = targetIndex;
                 isRolling = false;
+                gsap.set(targetEl, { clearProps: "transform" });
                 onScreenArrived(targetIndex);
             }
         });
@@ -856,7 +863,7 @@ function setupMainMenu() {
             }
             const target = parseInt(targetAttr);
             if (!isNaN(target)) {
-                jumpToScreen(target);
+                jumpToScreen(target, true);
             }
         });
     });
@@ -1395,12 +1402,12 @@ function setupGlobalControls() {
         if (isWeaponWheelOpen || isFullMapOpen) return;
         scrollDelta += e.deltaY;
         if (wheelTimer) clearTimeout(wheelTimer);
-        wheelTimer = setTimeout(() => { scrollDelta = 0; }, 200);
+        wheelTimer = setTimeout(() => { scrollDelta = 0; }, 180);
 
-        if (scrollDelta > 45) {
+        if (scrollDelta > 35) {
             scrollDelta = 0;
             if (currentScreen < totalScreens - 1) jumpToScreen(currentScreen + 1);
-        } else if (scrollDelta < -45) {
+        } else if (scrollDelta < -35) {
             scrollDelta = 0;
             if (currentScreen > 0) jumpToScreen(currentScreen - 1);
         }
@@ -1408,9 +1415,11 @@ function setupGlobalControls() {
 
     // Touch Swipe Navigation for mobile & touchscreens
     let touchStartY = 0;
+    let touchStartX = 0;
     window.addEventListener("touchstart", (e) => {
         if (e.touches && e.touches.length > 0) {
             touchStartY = e.touches[0].clientY;
+            touchStartX = e.touches[0].clientX;
         }
     }, { passive: true });
 
@@ -1418,11 +1427,16 @@ function setupGlobalControls() {
         if (isWeaponWheelOpen || isFullMapOpen) return;
         if (!e.changedTouches || e.changedTouches.length === 0) return;
         const touchEndY = e.changedTouches[0].clientY;
+        const touchEndX = e.changedTouches[0].clientX;
         const diffY = touchStartY - touchEndY;
-        if (diffY > 40) {
-            if (currentScreen < totalScreens - 1) jumpToScreen(currentScreen + 1);
-        } else if (diffY < -40) {
-            if (currentScreen > 0) jumpToScreen(currentScreen - 1);
+        const diffX = touchStartX - touchEndX;
+
+        if (Math.abs(diffY) > Math.abs(diffX) && Math.abs(diffY) > 30) {
+            if (diffY > 30) {
+                if (currentScreen < totalScreens - 1) jumpToScreen(currentScreen + 1);
+            } else if (diffY < -30) {
+                if (currentScreen > 0) jumpToScreen(currentScreen - 1);
+            }
         }
     }, { passive: true });
 }

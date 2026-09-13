@@ -626,6 +626,26 @@ button { border: none; background: none; cursor: pointer; font-family: inherit; 
     font-size: 0.68rem;
     font-weight: 700;
     color: rgba(255, 255, 255, 0.75);
+    pointer-events: auto;
+}
+
+.nav-arrow-btn {
+    background: rgba(255, 0, 127, 0.25);
+    border: 1px solid var(--gta-pink);
+    color: #fff;
+    font-family: var(--font-hud);
+    font-size: 0.8rem;
+    padding: 1px 9px;
+    border-radius: 4px;
+    cursor: pointer;
+    pointer-events: auto;
+    transition: all 0.2s ease;
+}
+
+.nav-arrow-btn:hover {
+    background: var(--gta-pink);
+    color: #000;
+    box-shadow: var(--glow-pink);
 }
 
 .reel-controls-bar kbd {
@@ -2179,12 +2199,23 @@ button { border: none; background: none; cursor: pointer; font-family: inherit; 
 @media (max-width: 768px) {
     .reel-hud-top-center { display: none; }
     .reel-loadout-widget { display: none; }
-    .reel-name-heading { font-size: 3.4rem; }
-    .reel-about-title, .reel-experience-title, .reel-complete-title { font-size: 3.5rem; }
-    .reel-hud-bottom-left { transform: scale(0.85); left: 10px; bottom: 10px; }
+    .reel-name-heading { font-size: 2.8rem; }
+    .reel-about-title, .reel-experience-title, .reel-complete-title { font-size: 3rem; }
+    .reel-hud-bottom-left { transform: scale(0.72); left: 6px; bottom: 8px; }
     .reel-screen-quote { display: none; }
     .reel-watermark { display: none; }
     .reel-character-badge { display: none; }
+    .reel-menu-col { max-width: 270px; gap: 0.8rem; margin-top: 25px; }
+    .reel-menu-link { padding: 4px 8px; font-size: 1.05rem; }
+    .radial-wheel-container { max-height: 92vh; overflow-y: auto; width: 95vw; padding: 10px 0; }
+    .radial-wheel-body { flex-direction: column !important; gap: 12px !important; }
+    .radial-disc { width: 300px !important; height: 300px !important; transform: scale(0.82); margin: -20px auto !important; }
+    .radial-slice-slot { width: 60px !important; height: 60px !important; }
+    .radial-slice-slot i { font-size: 1.1rem !important; }
+    .radial-slice-slot span { font-size: 0.62rem !important; }
+    .radial-stats-panel { max-width: 92vw !important; padding: 12px !important; width: 100% !important; }
+    .full-map-window { width: 96vw !important; height: 90vh !important; }
+    .reel-controls-bar { font-size: 0.58rem; padding: 2px 8px; gap: 4px; }
 }
 
 /* ================================================== */

@@ -22,7 +22,7 @@
     <!-- Font Awesome 6 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css?v=2.5">
 </head>
 <body>
 
@@ -193,6 +193,8 @@
     <div class="reel-hud-footer">
         <div class="reel-footer-tagline">Vice City Inspired — Build Different — Stay Legendary</div>
         <div class="reel-controls-bar">
+            <button class="nav-arrow-btn" onclick="jumpToScreen(currentScreen - 1, true)" title="Previous Screen">◀ PREV</button>
+            <span class="sep">|</span>
             <span><kbd>ENTER</kbd> SELECT</span>
             <span class="sep">|</span>
             <span><kbd>ESC</kbd> BACK</span>
@@ -204,6 +206,8 @@
             <span><kbd>W</kbd> WANTED</span>
             <span class="sep">|</span>
             <span><kbd>M</kbd> MUTE</span>
+            <span class="sep">|</span>
+            <button class="nav-arrow-btn" onclick="jumpToScreen(currentScreen + 1, true)" title="Next Screen">NEXT ▶</button>
         </div>
     </div>
 
@@ -1261,6 +1265,6 @@
 
     <!-- GSAP CDN -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-    <script src="script.js"></script>
+    <script src="script.js?v=2.5"></script>
 </body>
 </html>
